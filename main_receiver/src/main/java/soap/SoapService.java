@@ -23,12 +23,13 @@ public class SoapService {
     public void notifyOccupation(Spot spot) {
         LOGGER.info("spot occupation receiver: " + spot);
         receiverBean.addNotification("miejsce zajete");
+        receiverBean.addSpot(spot);
     }
 
     @WebMethod
     public void notifyVacation(Integer id) {
         LOGGER.info("spot vacation receiver: " + id);
         receiverBean.addNotification("miejsce " + id + " opuszczone");
+        receiverBean.removeSpot(id);
     }
-
 }
