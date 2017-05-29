@@ -6,6 +6,8 @@ public class Spot {
     private Integer id;
     private DateTime start;
 
+    public Spot() {}
+
     public Spot(Integer id, DateTime start) {
         this.id = id;
         this.start = start;

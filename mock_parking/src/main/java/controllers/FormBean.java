@@ -1,5 +1,7 @@
 package controllers;
 
+import generated.SoapService;
+import generated.SoapServiceService;
 import model.Spot;
 import org.joda.time.DateTime;
 
@@ -17,27 +19,46 @@ import java.util.logging.Logger;
 @Named(value = "formbean")
 public class FormBean implements Serializable {
     private final static Logger LOGGER = Logger.getLogger(FormBean.class.toString());
-    private static List<Spot> occupied = new ArrayList<>();
+    private static List<generated.Spot> occupied = new ArrayList<>();
 
     private Integer id;
 
     public void occupy() {
-        DateTime time = new DateTime();
+        generated.DateTime time = new generated.DateTime();
         LOGGER.info(() -> "New spot occupied. Time: " + time);
-        occupied.add(new Spot(id,time));
+
+        generated.Spot spot = new generated.Spot();
+        spot.setId(id);
+        spot.setStart(time);
+
+        occupied.add(spot);
+
+        SoapService service = new SoapServiceService().getSoapServicePort();
+        service.notifyOccupation(spot);
     }
 
     public void vacate(Integer id) {
         LOGGER.info(() -> "Spot vacated. Id: " + id);
-        occupied.remove(new Spot(id,null));
+
+        for(int i = 0; i < occupied.size(); i++) {
+            if (occupied.get(i).getId()==id) {
+                occupied.remove(i);
+                break;
+            }
+        }
+
+        SoapService service = new SoapServiceService().getSoapServicePort();
+        service.notifyVacation(id);
+
     }
 
     /* GETTERS & SETTERS */
-    public List<Spot> getOccupied() {
+
+    public List<generated.Spot> getOccupied() {
         return occupied;
     }
 
-    public void setOccupied(List<Spot> occupied) {
+    public void setOccupied(List<generated.Spot> occupied) {
         FormBean.occupied = occupied;
     }
 

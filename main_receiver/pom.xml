@@ -19,25 +19,11 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
-        <version.jboss.bom>8.2.1.Final</version.jboss.bom>
-        <version.compiler.plugin>3.1</version.compiler.plugin>
-        <version.surefire.plugin>2.16</version.surefire.plugin>
-        <version.war.plugin>2.5</version.war.plugin>
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <p.type>war</p.type>
-    </properties>
-
-
     <groupId>soa_projekt</groupId>
-    <artifactId>mock_parking</artifactId>
+    <artifactId>main_receiver</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>${p.type}</packaging>
-
-    <name>WildFly Quickstarts: mock_parking</name>
+    <packaging>war</packaging>
+    <name>WildFly Quickstarts: main_receiver</name>
     <description>A starter Java EE 7 webapp project for use on JBoss WildFly / WildFly, generated from the jboss-javaee6-webapp archetype</description>
 
     <url>http://wildfly.org</url>
@@ -49,6 +35,29 @@
         </license>
     </licenses>
 
+    <properties>
+        <!-- Explicitly declaring the source encoding eliminates the following 
+            message: -->
+        <!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered 
+            resources, i.e. build is platform dependent! -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- JBoss dependency versions -->
+        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+
+        <!-- Define the version of the JBoss BOMs we want to import to specify 
+            tested stacks. -->
+        <version.jboss.bom>8.2.1.Final</version.jboss.bom>
+
+        <!-- other plugin versions -->
+        <version.compiler.plugin>3.1</version.compiler.plugin>
+        <version.surefire.plugin>2.16</version.surefire.plugin>
+        <version.war.plugin>2.5</version.war.plugin>
+
+        <!-- maven-compiler-plugin -->
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+    </properties>
 
 
     <dependencyManagement>
@@ -186,6 +195,7 @@
             <scope>test</scope>
         </dependency>
 
+
         <!-- DODATKI -->
 
         <dependency>
@@ -193,11 +203,15 @@
             <artifactId>richfaces</artifactId>
             <version>4.5.17.Final</version>
         </dependency>
-
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.9.9</version>
+        </dependency>
+        <dependency>
+            <groupId>soa_projekt</groupId>
+            <artifactId>mock_parking</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
@@ -221,14 +235,6 @@
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.wildfly.maven.plugin}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -299,38 +305,11 @@
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.0.2</version>
-                    </plugin>
-                    <plugin>
                         <artifactId>maven-war-plugin</artifactId>
                         <version>${version.war.plugin}</version>
                         <configuration>
                             <outputDirectory>deployments</outputDirectory>
                             <warName>ROOT</warName>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>jaxws-maven-plugin</artifactId>
-                        <version>2.4.1</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>wsimport</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <useJdkToolchainExecutable>true</useJdkToolchainExecutable>
-                            <wsdlUrls>
-                                <wsdlUrl>
-                                    http://localhost:8080/main_receiver/SoapService?wsdl
-                                </wsdlUrl>
-                            </wsdlUrls>
-                            <keep>true</keep>
-                            <packageName>pl.edu.agh.kis.soa.generated</packageName>
-                            <sourceDestDir>src/main/java</sourceDestDir>
                         </configuration>
                     </plugin>
                 </plugins>
