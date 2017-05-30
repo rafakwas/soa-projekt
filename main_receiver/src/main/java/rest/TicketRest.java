@@ -30,6 +30,7 @@ public class TicketRest {
 
     @GET
     @Path("info/{index}")
+    @Produces(MediaType.APPLICATION_JSON)
     public String getTicket(@PathParam("index") String index){
         Ticket ticket = new Ticket();
         ticket.setId(1);

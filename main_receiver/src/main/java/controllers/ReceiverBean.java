@@ -1,5 +1,11 @@
 package controllers;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import entity.Spot;
 import entity.Ticket;
 import org.hibernate.Query;
@@ -17,6 +23,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -98,9 +105,23 @@ public class ReceiverBean {
     public void getTicket() {
         client = ClientBuilder.newClient();
         WebTarget target = client.target(REST_URL + "/info/1");
-        Ticket ticket = target.request(MediaType.APPLICATION_JSON).get(Ticket.class);
-        LOGGER.info(()-> "received ticket: " + ticket);
-        notifications.add("received ticket: " + ticket);
+        String jsonString = target.request(MediaType.APPLICATION_JSON).get(String.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JodaModule());
+
+        Ticket ticket = null;
+        try {
+            ticket = mapper.readValue(jsonString, Ticket.class);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        notifications.add(ticket.toString());
     }
 
     public void getTickets() {
@@ -109,6 +130,9 @@ public class ReceiverBean {
         List<Ticket> tickets= target.request(MediaType.APPLICATION_JSON).get(List.class);
         LOGGER.info(()-> "received list of tickets: " + tickets);
         Ticket ticket = tickets.get(0);
+
+
 //        notifications.add("id: " + ticket.getId() + " .... start " + ticket.getStart().getHourOfDay()  + ":" + ticket.getStart().getMinuteOfHour() + ":" + ticket.getStart().getSecondOfMinute());
+
     }
 }
