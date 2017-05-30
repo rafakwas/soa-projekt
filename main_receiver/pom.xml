@@ -108,6 +108,7 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>jaxrs-api</artifactId>
+            <version>3.0.1.Final</version>
             <scope>provided</scope>
         </dependency>
 
@@ -156,9 +157,9 @@
             <artifactId>jsf-api</artifactId>
             <version>2.1</version>
         </dependency>
+
+
         <!--MOJE DODATKI DO ARCHETYPU-->
-
-
         <dependency>
             <groupId>org.richfaces</groupId>
             <artifactId>richfaces</artifactId>
@@ -235,15 +236,43 @@
         <!-- DODATKI -->
 
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.9.9</version>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
         </dependency>
         <dependency>
             <groupId>soa_projekt</groupId>
             <artifactId>mock_parking</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>3.0.1.Final</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+            <version>2.7.4</version>
+        </dependency>
+
 
     </dependencies>
 

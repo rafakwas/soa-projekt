@@ -20,7 +20,16 @@
         </h:column>
     </h:dataTable>
 
-    <h:dataTable id="occupationTable" value="#{receiverbean.}"
+    <h:dataTable id="occupationTable" value="#{receiverbean.spots}" var="_spot">
+        <h:column>
+            <f:facet name="header">spot</f:facet>
+            #{_spot}
+        </h:column>
+    </h:dataTable>
+
+    <h:form>
+        <h:commandButton value="Get ticket" action="#{receiverbean.submit}"/>
+    </h:form>
 
 </h:body>
 </html>
