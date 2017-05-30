@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaMapper;
@@ -99,7 +100,7 @@ public class ReceiverBean {
 
     public void submit() {
         LOGGER.info(() -> "submit method start");
-        getTicket();
+        getTickets();
     }
 
     public void getTicket() {
@@ -127,12 +128,22 @@ public class ReceiverBean {
     public void getTickets() {
         client = ClientBuilder.newClient();
         WebTarget target = client.target(REST_URL + "/all");
-        List<Ticket> tickets= target.request(MediaType.APPLICATION_JSON).get(List.class);
-        LOGGER.info(()-> "received list of tickets: " + tickets);
-        Ticket ticket = tickets.get(0);
 
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JodaModule());
 
-//        notifications.add("id: " + ticket.getId() + " .... start " + ticket.getStart().getHourOfDay()  + ":" + ticket.getStart().getMinuteOfHour() + ":" + ticket.getStart().getSecondOfMinute());
+        String jsonString = target.request(MediaType.APPLICATION_JSON).get(String.class);
 
+        List<Ticket> myObjects = null;
+        try {
+            myObjects = mapper.readValue(jsonString, new TypeReference<List<Ticket>>(){});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        LOGGER.info("received list: " + myObjects.toString());
+        Ticket ticket = myObjects.get(0);
+        LOGGER.info("received list: " + myObjects.toString());
+        notifications.add(myObjects.toString());
     }
 }

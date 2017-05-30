@@ -54,7 +54,7 @@ public class TicketRest {
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Ticket> getTickets(){
+    public String getTickets(){
         List<Ticket> tickets = new ArrayList<>();
 
         Ticket ticket1 = new Ticket();
@@ -70,7 +70,19 @@ public class TicketRest {
         ticket2.setEnd(DateTime.now().plusHours(2));
 
         Collections.addAll(tickets,ticket1,ticket2);
-        return tickets;
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JodaModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        ObjectWriter ow = mapper.writer();
+
+        String result = null;
+        try {
+            result = ow.writeValueAsString(tickets);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @GET
