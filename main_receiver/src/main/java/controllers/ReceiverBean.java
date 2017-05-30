@@ -17,9 +17,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jboss.resteasy.client.jaxrs.internal.ClientResponse;
 import org.joda.time.DateTime;
+import repository.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.json.JsonArray;
 import javax.persistence.EntityManager;
@@ -37,6 +39,9 @@ import java.util.logging.Logger;
 @Named("receiverbean")
 public class ReceiverBean {
     private final static Logger LOGGER = Logger.getLogger(ReceiverBean.class.toString());
+
+    @Inject
+    Repository repository;
 
     private List<String> notifications = new ArrayList<>();
 
@@ -80,12 +85,10 @@ public class ReceiverBean {
 //        query.executeUpdate();
 //        tx.commit();
 //    }
-//
-//    public List<Spot> getSpots() {
-//        String hql = "from Spot";
-//        javax.persistence.Query query = em.createQuery(hql);
-//        return query.getResultList();
-//    }
+
+    public List<Spot> getSpots() {
+        return repository.getAllSpots();
+    }
 
 
 

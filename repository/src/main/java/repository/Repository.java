@@ -13,4 +13,5 @@ public interface Repository {
     void addTicket(Ticket ticket);
     List<Spot> getAllSpots();
     List<Ticket> getAllTickets();
+    void test();
 }

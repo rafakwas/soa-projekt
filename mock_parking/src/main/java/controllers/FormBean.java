@@ -33,18 +33,18 @@ public class FormBean implements Serializable {
         service.notifyOccupation(spot);
     }
 
-    public void vacate(Integer id) {
+    public void vacate(Integer place) {
         LOGGER.info(() -> "Spot vacated. Id: " + id);
 
         for(int i = 0; i < occupied.size(); i++) {
-            if (occupied.get(i).getId()==id) {
+            if (occupied.get(i).getPlace()==id) {
                 occupied.remove(i);
                 break;
             }
         }
 
         SoapService service = new SoapServiceService().getSoapServicePort();
-        service.notifyVacation(id);
+        service.notifyVacation(place);
 
     }
 

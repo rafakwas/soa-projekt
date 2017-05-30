@@ -52,7 +52,7 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public void removeSpot(Integer place) {
-        LOGGER.info(()-> "Add spot place: " + place);
+        LOGGER.info(()-> "Remove spot place: " + place);
         Session session = emSpot.unwrap(Session.class);
         String hql = "delete from Spot where place = :place";
         Transaction tx = null;
@@ -60,6 +60,7 @@ public class RepositoryImpl implements Repository {
         Query query = session.createQuery(hql).setParameter("place",place);
         query.executeUpdate();
         tx.commit();
+        LOGGER.info(() -> "Spot " +place+ "deleted from database");
     }
 
     @Override
@@ -69,11 +70,18 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public List<Spot> getAllSpots() {
-        return null;
+        String hql = "from Spot";
+        javax.persistence.Query query = emSpot.createQuery(hql);
+        return query.getResultList();
     }
 
     @Override
     public List<entity.Ticket> getAllTickets() {
         return null;
+    }
+
+    @Override
+    public void test() {
+        return;
     }
 }
