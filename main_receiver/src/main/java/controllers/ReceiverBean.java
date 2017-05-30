@@ -62,11 +62,11 @@ public class ReceiverBean {
         this.notifications = notifications;
     }
 
-    public void addSpot(model.Spot spot) {
+    public void addSpot(Spot spot) {
 
-        entity.Spot persisted = new entity.Spot();
+        Spot persisted = new Spot();
         persisted.setPlace(spot.getId());
-        persisted.setTime(spot.getStart());
+        persisted.setTime(spot.getTime());
 
         em.getTransaction().begin();
         if(!em.contains(persisted)) {
@@ -78,7 +78,7 @@ public class ReceiverBean {
 
         String hql = "from Spot where id = :id";
         javax.persistence.Query query = em.createQuery(hql).setParameter("id",spot.getId());
-        entity.Spot result = (entity.Spot)query.getSingleResult();
+        Spot result = (Spot)query.getSingleResult();
     }
 
     public void removeSpot(Integer place) {
@@ -91,7 +91,7 @@ public class ReceiverBean {
         tx.commit();
     }
 
-    public List<entity.Spot> getSpots() {
+    public List<Spot> getSpots() {
         String hql = "from Spot";
         javax.persistence.Query query = em.createQuery(hql);
         return query.getResultList();

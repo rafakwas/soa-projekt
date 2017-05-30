@@ -1,7 +1,8 @@
 package soap;
 
 import controllers.ReceiverBean;
-import model.Spot;
+import entity.Spot;
+import repository.Repository;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,17 +20,21 @@ public class SoapService {
     @Inject
     ReceiverBean receiverBean;
 
+    @Inject
+    Repository repository;
+
     @WebMethod
     public void notifyOccupation(Spot spot) {
         LOGGER.info("spot occupation receiver: " + spot);
         receiverBean.addNotification("miejsce zajete");
-        receiverBean.addSpot(spot);
+//        receiverBean.addSpot(spot);
+        repository.addSpot(spot);
     }
 
     @WebMethod
     public void notifyVacation(Integer id) {
         LOGGER.info("spot vacation receiver: " + id);
         receiverBean.addNotification("miejsce " + id + " opuszczone");
-        receiverBean.removeSpot(id);
+//        receiverBean.removeSpot(id);
     }
 }

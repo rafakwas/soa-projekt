@@ -2,12 +2,9 @@ package controllers;
 
 import generated.SoapService;
 import generated.SoapServiceService;
-import model.Spot;
-import org.joda.time.DateTime;
 
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.Stateless;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,7 +27,6 @@ public class FormBean implements Serializable {
         generated.Spot spot = new generated.Spot();
         spot.setId(id);
         spot.setStart(time);
-
         occupied.add(spot);
 
         SoapService service = new SoapServiceService().getSoapServicePort();

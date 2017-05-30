@@ -54,4 +54,20 @@ public class Spot {
                 ", time=" + time +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Spot spot = (Spot) o;
+
+        return place.equals(spot.place);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return place.hashCode();
+    }
 }
