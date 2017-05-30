@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.sun.org.apache.xml.internal.utils.URI;
 import entity.Ticket;
 import org.joda.time.DateTime;
+import repository.Repository;
 import service.ticket.TicketService;
 
 
@@ -32,6 +33,9 @@ public class TicketRest {
 
     @Inject
     private TicketService ticketService;
+
+    @Inject
+    Repository repository;
 
     @GET
     @Path("info/{index}")
@@ -133,9 +137,10 @@ public class TicketRest {
             e.printStackTrace();
         }
 
+        repository.test3();
+        repository.addTicket(ticket);
+
         String output = ticket.getStart().getHourOfDay()+":"+ticket.getStart().getMinuteOfHour()+":"+ticket.getStart().getSecondOfMinute();
-
-
         return Response.status(201).entity(output).build();
     }
 

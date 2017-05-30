@@ -11,7 +11,7 @@
 <h:body>
 
     <h:form id="addbook">
-            <h3>Occupy spot</h3>
+            <h2>Occupy spot</h2>
         <h:panelGrid columns="4">
             <h:outputText value="Spot" />
             <h:inputText id="spot" value="#{formbean.id}">
@@ -22,6 +22,20 @@
             <br />
             <h:commandButton action="#{formbean.occupy}"
                              value="Occupy"></h:commandButton>
+            </h:panelGrid>
+    </h:form>
+    <h:form id="ticket">
+        <h2>Buy ticket</h2>
+        <h:panelGrid columns="4">
+            <h:outputText value="Duration in minutes" />
+            <h:inputText id="duration" value="#{formbean.duration}">
+                <f:validateLongRange minimum="10" maximum="600"/>
+                <f:ajax event="keyup" render="messageSpot" />
+            </h:inputText>
+            <h:message id="durationMessage" for="duration" style="color: red"></h:message>
+            <br />
+            <h:commandButton action="#{formbean.buyTicket}"
+                             value="Buy ticket"></h:commandButton>
         </h:panelGrid>
     </h:form>
 
@@ -29,6 +43,10 @@
     <h:dataTable id="datatable" value="#{formbean.occupied}" var="_spot">
         <h:column>
             <f:facet name="header">id</f:facet>
+            #{_spot.id}
+        </h:column>
+        <h:column>
+            <f:facet name="header">place</f:facet>
             #{_spot.place}
         </h:column>
         <h:column>

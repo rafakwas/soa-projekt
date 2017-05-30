@@ -90,6 +90,8 @@ public class ReceiverBean {
         return repository.getAllSpots();
     }
 
+    public Integer getOccupationNumber() { return  getSpots().size(); }
+
 
 
     private static final String REST_URL = "http://localhost:8080/main_receiver/api/ticket";

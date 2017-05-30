@@ -4,6 +4,7 @@ import controllers.ReceiverBean;
 import entity.Spot;
 import repository.Repository;
 
+import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jws.WebMethod;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @WebService
-@Stateless
+@Singleton
 public class SoapService {
     private final static Logger LOGGER = Logger.getLogger(SoapService.class.toString());
 

@@ -10,9 +10,10 @@
 </h:head>
 <h:body>
 
-    <h3>Dashboard</h3>
+    <h3>Dashboard 2</h3>
 
-    <h2>Bookstore</h2>
+    <h:outputText value="No spots occupied" rendered="#{empty receiverbean.spots}"/>
+    <h:outputText value="Number of occupied spots: #{receiverbean.occupationNumber}" rendered="#{not empty receiverbean.spots}"/>
     <h:dataTable id="datatable" value="#{receiverbean.notifications}" var="_notification">
         <h:column>
             <f:facet name="header">notification</f:facet>

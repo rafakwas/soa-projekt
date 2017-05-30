@@ -7,18 +7,6 @@
 
    <persistence-unit name="hibernate-spot-repository">
       <class>entity.Spot</class>
-      <properties>
-         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-         <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
-         <property name="hibernate.connection.username" value="ralphigi"/>
-         <property name="hibernate.connection.password" value="ralphigi"/>
-         <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/ralphigi"/>
-         <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
-         <property name="hibernate.search.default.indexBase" value="target"/>
-         <property name="hibernate.search.default.directory_provider" value="filesystem"/>
-      </properties>
-   </persistence-unit>
-   <persistence-unit name="hibernate-ticket-repository">
       <class>entity.Ticket</class>
       <properties>
          <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
@@ -31,4 +19,4 @@
          <property name="hibernate.search.default.directory_provider" value="filesystem"/>
       </properties>
    </persistence-unit>
-</persistence>
+  </persistence>

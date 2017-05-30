@@ -4,8 +4,7 @@ import entity.Spot;
 import entity.Ticket;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Local;
-import javax.ejb.Singleton;
+import javax.ejb.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -16,9 +15,14 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import static javax.ejb.LockType.READ;
+import static javax.ejb.LockType.WRITE;
+
 
 @Singleton
+@ConcurrencyManagement(value = ConcurrencyManagementType.CONTAINER)
 @Local(Repository.class)
+@AccessTimeout(value=30000)
 public class RepositoryImpl implements Repository {
 
     private final static Logger LOGGER = Logger.getLogger(RepositoryImpl.class.toString());
@@ -39,6 +43,7 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    @Lock(WRITE)
     public void addSpot(Spot spot) {
         LOGGER.info(()-> "Add spot:" + spot);
         emSpot.getTransaction().begin();
@@ -51,6 +56,7 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    @Lock(WRITE)
     public void removeSpot(Integer place) {
         LOGGER.info(()-> "Remove spot place: " + place);
         Session session = emSpot.unwrap(Session.class);
@@ -64,11 +70,27 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    @Lock(WRITE)
     public void addTicket(Ticket ticket) {
         LOGGER.info(()-> "Add ticket: " + ticket);
+        emSpot.getTransaction().begin();
+        LOGGER.info(()-> "Transaction begin: " + ticket);
+        if(!emSpot.contains(ticket)) {
+            LOGGER.info(()-> "No ticket in database");
+            emSpot.persist(ticket);
+            LOGGER.info(()-> "Ticket persisted: " +ticket);
+            emSpot.flush();
+            LOGGER.info(()-> "Flushed: " + ticket);
+        }
+        emSpot.getTransaction().commit();
+        LOGGER.info(()-> "Transaction commited: " + ticket);
+
+        LOGGER.info(() -> "Added ticket to database: " + ticket);
+
     }
 
     @Override
+    @Lock(READ)
     public List<Spot> getAllSpots() {
         String hql = "from Spot";
         javax.persistence.Query query = emSpot.createQuery(hql);
@@ -76,12 +98,21 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public List<entity.Ticket> getAllTickets() {
-        return null;
+    @Lock(READ)
+    public List<Ticket> getAllTickets() {
+        String hql = "from Ticket ";
+        javax.persistence.Query query = emSpot.createQuery(hql);
+        return query.getResultList();
     }
 
     @Override
+    @Lock(READ)
     public void test() {
         return;
+    }
+
+    @Override
+    public void test3() {
+
     }
 }
