@@ -1,6 +1,8 @@
 package rest;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -20,6 +22,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -116,11 +119,24 @@ public class TicketRest {
             return Response.status(400).entity("Please add string!!").build();
         }
 
-        if(data.isEmpty()) {
-            return Response.status(400).entity("Please provide the string!!").build();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JodaModule());
+
+        Ticket ticket = null;
+        try {
+            ticket = mapper.readValue(data, Ticket.class);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        return Response.status(201).entity(data).build();
+        String output = ticket.getStart().getHourOfDay()+":"+ticket.getStart().getMinuteOfHour()+":"+ticket.getStart().getSecondOfMinute();
+
+
+        return Response.status(201).entity(output).build();
     }
 
 }

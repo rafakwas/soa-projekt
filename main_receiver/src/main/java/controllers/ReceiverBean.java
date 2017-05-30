@@ -135,7 +135,26 @@ public class ReceiverBean {
             client = ClientBuilder.newClient();
             WebTarget target = client.target(REST_URL + "/post");
 
-            String input = "abcdefg";
+
+
+            /* ------------------------PREPARE TICKET JSON ----------------------------*/
+            Ticket ticket = new Ticket();
+            ticket.setId(1);
+            ticket.setStart(DateTime.now());
+            ticket.setCost(20.0);
+            ticket.setEnd(DateTime.now().plusHours(1));
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JodaModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            ObjectWriter ow = mapper.writer();
+            String input= null;
+            try {
+                input = ow.writeValueAsString(ticket);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            /* ------------------------PREPARE TICKET JSON ----------------------------*/
 
             Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
             Response response = invocationBuilder.post(Entity.entity(input, MediaType.APPLICATION_JSON));
@@ -168,22 +187,3 @@ public class ReceiverBean {
         notifications.add(myObjects.toString());
     }
 }
-
-//            /* ------------------------PREPARE TICKET JSON ----------------------------*/
-//            Ticket ticket = new Ticket();
-//            ticket.setId(1);
-//            ticket.setStart(DateTime.now());
-//            ticket.setCost(20.0);
-//            ticket.setEnd(DateTime.now().plusHours(1));
-//
-//            ObjectMapper mapper = new ObjectMapper();
-//            mapper.registerModule(new JodaModule());
-//            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//            ObjectWriter ow = mapper.writer();
-//            String input= null;
-//            try {
-//                input = ow.writeValueAsString(ticket);
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//            /* ------------------------PREPARE TICKET JSON ----------------------------*/
