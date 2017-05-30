@@ -1,9 +1,12 @@
 package controllers;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
@@ -12,6 +15,8 @@ import entity.Ticket;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.jboss.resteasy.client.jaxrs.internal.ClientResponse;
+import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -20,10 +25,9 @@ import javax.json.JsonArray;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +104,8 @@ public class ReceiverBean {
 
     public void submit() {
         LOGGER.info(() -> "submit method start");
-        getTickets();
+        postTicket();
+        LOGGER.info(() -> "submit method end");
     }
 
     public void getTicket() {
@@ -125,6 +130,22 @@ public class ReceiverBean {
         notifications.add(ticket.toString());
     }
 
+    public void postTicket() {
+
+            client = ClientBuilder.newClient();
+            WebTarget target = client.target(REST_URL + "/post");
+
+            String input = "abcdefg";
+
+            Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.post(Entity.entity(input, MediaType.APPLICATION_JSON));
+
+            LOGGER.info(response.getStatus() + "");
+
+            notifications.add(response.readEntity(String.class));
+
+    }
+
     public void getTickets() {
         client = ClientBuilder.newClient();
         WebTarget target = client.target(REST_URL + "/all");
@@ -147,3 +168,22 @@ public class ReceiverBean {
         notifications.add(myObjects.toString());
     }
 }
+
+//            /* ------------------------PREPARE TICKET JSON ----------------------------*/
+//            Ticket ticket = new Ticket();
+//            ticket.setId(1);
+//            ticket.setStart(DateTime.now());
+//            ticket.setCost(20.0);
+//            ticket.setEnd(DateTime.now().plusHours(1));
+//
+//            ObjectMapper mapper = new ObjectMapper();
+//            mapper.registerModule(new JodaModule());
+//            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+//            ObjectWriter ow = mapper.writer();
+//            String input= null;
+//            try {
+//                input = ow.writeValueAsString(ticket);
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+//            /* ------------------------PREPARE TICKET JSON ----------------------------*/

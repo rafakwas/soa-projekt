@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.sun.org.apache.xml.internal.utils.URI;
 import entity.Ticket;
 import org.joda.time.DateTime;
 import service.ticket.TicketService;
@@ -18,6 +19,7 @@ import javax.json.JsonArrayBuilder;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -103,4 +105,22 @@ public class TicketRest {
     public void deleteStudent(@PathParam("index") String index){
         ticketService.deleteTicket(Integer.parseInt(index));
     }
+
+    @POST
+    @Path("/post")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response notifyTicket(String data){
+
+        if(data == null){
+            return Response.status(400).entity("Please add string!!").build();
+        }
+
+        if(data.isEmpty()) {
+            return Response.status(400).entity("Please provide the string!!").build();
+        }
+
+        return Response.status(201).entity(data).build();
+    }
+
 }
