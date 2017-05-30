@@ -29,11 +29,11 @@
     <h:dataTable id="datatable" value="#{formbean.occupied}" var="_spot">
         <h:column>
             <f:facet name="header">id</f:facet>
-            #{_spot.id}
+            #{_spot.place}
         </h:column>
         <h:column>
             <f:facet name="header">time</f:facet>
-            #{_spot.start}
+            #{_spot.time}
         </h:column>
         <h:column>
             <h:form id="action_form">

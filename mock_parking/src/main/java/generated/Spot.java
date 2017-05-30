@@ -17,7 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="start" type="{http://soap/}dateTime" minOccurs="0"/>
+ *         &lt;element name="place" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="time" type="{http://soap/}dateTime" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,12 +30,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "spot", propOrder = {
     "id",
-    "start"
+    "place",
+    "time"
 })
 public class Spot {
 
     protected Integer id;
-    protected DateTime start;
+    protected Integer place;
+    protected DateTime time;
 
     /**
      * Gets the value of the id property.
@@ -61,27 +64,51 @@ public class Spot {
     }
 
     /**
-     * Gets the value of the start property.
+     * Gets the value of the place property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getPlace() {
+        return place;
+    }
+
+    /**
+     * Sets the value of the place property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setPlace(Integer value) {
+        this.place = value;
+    }
+
+    /**
+     * Gets the value of the time property.
      * 
      * @return
      *     possible object is
      *     {@link DateTime }
      *     
      */
-    public DateTime getStart() {
-        return start;
+    public DateTime getTime() {
+        return time;
     }
 
     /**
-     * Sets the value of the start property.
+     * Sets the value of the time property.
      * 
      * @param value
      *     allowed object is
      *     {@link DateTime }
      *     
      */
-    public void setStart(DateTime value) {
-        this.start = value;
+    public void setTime(DateTime value) {
+        this.time = value;
     }
 
 }

@@ -36,5 +36,6 @@ public class SoapService {
         LOGGER.info("spot vacation receiver: " + id);
         receiverBean.addNotification("miejsce " + id + " opuszczone");
 //        receiverBean.removeSpot(id);
+        repository.removeSpot(id);
     }
 }

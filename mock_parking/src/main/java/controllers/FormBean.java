@@ -25,8 +25,8 @@ public class FormBean implements Serializable {
         LOGGER.info(() -> "New spot occupied. Time: " + time);
 
         generated.Spot spot = new generated.Spot();
-        spot.setId(id);
-        spot.setStart(time);
+        spot.setPlace(id);
+        spot.setTime(time);
         occupied.add(spot);
 
         SoapService service = new SoapServiceService().getSoapServicePort();

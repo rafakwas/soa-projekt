@@ -38,16 +38,6 @@ import java.util.logging.Logger;
 public class ReceiverBean {
     private final static Logger LOGGER = Logger.getLogger(ReceiverBean.class.toString());
 
-    private EntityManagerFactory emf;
-    private EntityManager em;
-
-    @PostConstruct
-    public void init() {
-        emf = Persistence.createEntityManagerFactory( "hibernate-spot" );
-        em = emf.createEntityManager();
-        LOGGER.info(()-> "Initialization completed");
-    }
-
     private List<String> notifications = new ArrayList<>();
 
     public void addNotification(String info) {
@@ -61,41 +51,41 @@ public class ReceiverBean {
     public void setNotifications(List<String> notifications) {
         this.notifications = notifications;
     }
-
-    public void addSpot(Spot spot) {
-
-        Spot persisted = new Spot();
-        persisted.setPlace(spot.getId());
-        persisted.setTime(spot.getTime());
-
-        em.getTransaction().begin();
-        if(!em.contains(persisted)) {
-            em.persist(persisted);
-            em.flush();
-        }
-        em.getTransaction().commit();
-        LOGGER.info(() -> "Added spot to database: " + persisted);
-
-        String hql = "from Spot where id = :id";
-        javax.persistence.Query query = em.createQuery(hql).setParameter("id",spot.getId());
-        Spot result = (Spot)query.getSingleResult();
-    }
-
-    public void removeSpot(Integer place) {
-        Session session = em.unwrap(Session.class);
-        String hql = "delete from Spot where place = :place";
-        Transaction tx = null;
-        tx = session.beginTransaction();
-        Query query = session.createQuery(hql).setParameter("place",place);
-        query.executeUpdate();
-        tx.commit();
-    }
-
-    public List<Spot> getSpots() {
-        String hql = "from Spot";
-        javax.persistence.Query query = em.createQuery(hql);
-        return query.getResultList();
-    }
+//
+//    public void addSpot(Spot spot) {
+//
+//        Spot persisted = new Spot();
+//        persisted.setPlace(spot.getId());
+//        persisted.setTime(spot.getTime());
+//
+//        em.getTransaction().begin();
+//        if(!em.contains(persisted)) {
+//            em.persist(persisted);
+//            em.flush();
+//        }
+//        em.getTransaction().commit();
+//        LOGGER.info(() -> "Added spot to database: " + persisted);
+//
+//        String hql = "from Spot where id = :id";
+//        javax.persistence.Query query = em.createQuery(hql).setParameter("id",spot.getId());
+//        Spot result = (Spot)query.getSingleResult();
+//    }
+//
+//    public void removeSpot(Integer place) {
+//        Session session = em.unwrap(Session.class);
+//        String hql = "delete from Spot where place = :place";
+//        Transaction tx = null;
+//        tx = session.beginTransaction();
+//        Query query = session.createQuery(hql).setParameter("place",place);
+//        query.executeUpdate();
+//        tx.commit();
+//    }
+//
+//    public List<Spot> getSpots() {
+//        String hql = "from Spot";
+//        javax.persistence.Query query = em.createQuery(hql);
+//        return query.getResultList();
+//    }
 
 
 

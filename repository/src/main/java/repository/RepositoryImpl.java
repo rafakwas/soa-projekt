@@ -12,6 +12,11 @@ import javax.persistence.Persistence;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+
 @Singleton
 @Local(Repository.class)
 public class RepositoryImpl implements Repository {
@@ -48,6 +53,13 @@ public class RepositoryImpl implements Repository {
     @Override
     public void removeSpot(Integer place) {
         LOGGER.info(()-> "Add spot place: " + place);
+        Session session = emSpot.unwrap(Session.class);
+        String hql = "delete from Spot where place = :place";
+        Transaction tx = null;
+        tx = session.beginTransaction();
+        Query query = session.createQuery(hql).setParameter("place",place);
+        query.executeUpdate();
+        tx.commit();
     }
 
     @Override
