@@ -12,9 +12,9 @@ import javax.persistence.Persistence;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
 import static javax.ejb.LockType.READ;
 import static javax.ejb.LockType.WRITE;

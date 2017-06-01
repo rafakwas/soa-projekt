@@ -148,7 +148,7 @@
 
         <!-- Now we declare any tools needed -->
 
-        <!-- Annotation processor to generate the JPA 2.0 metamodel classes for 
+        <!-- Annotation processor to generate the JPA 2.0 metamodel classes for
             typesafe criteria queries -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -156,7 +156,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Annotation processor that raising compilation errors whenever constraint 
+        <!-- Annotation processor that raising compilation errors whenever constraint
             annotations are incorrectly used. -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -164,29 +164,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Needed for running tests (you may also use TestNG) -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Optional, but highly recommended -->
-        <!-- Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA) 
-            JPA from JUnit/TestNG -->
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.arquillian.protocol</groupId>
-            <artifactId>arquillian-protocol-servlet</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- DODATKI -->
+      <!-- DODATKI -->
 
         <dependency>
             <groupId>org.richfaces</groupId>
