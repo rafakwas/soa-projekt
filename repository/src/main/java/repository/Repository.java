@@ -8,11 +8,12 @@ import java.util.List;
 
 @Local
 public interface Repository {
-    void addSpot(Spot spot);
+    void addSpot();
     void removeSpot(Integer place);
-    void addTicket(Ticket ticket);
+    void addTicket();
+    void addTicketReplica();
+    void addSomeType();
     List<Spot> getAllSpots();
     List<Ticket> getAllTickets();
-    void test();
-    void test3();
+
 }

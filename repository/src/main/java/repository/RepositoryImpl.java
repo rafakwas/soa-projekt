@@ -5,6 +5,7 @@ import entity.Ticket;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,6 +15,9 @@ import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.joda.time.DateTime;
+import test.entity.Sometype;
+import test.entity.TicketReplica;
 
 import static javax.ejb.LockType.READ;
 import static javax.ejb.LockType.WRITE;
@@ -23,6 +27,7 @@ import static javax.ejb.LockType.WRITE;
 @ConcurrencyManagement(value = ConcurrencyManagementType.CONTAINER)
 @Local(Repository.class)
 @AccessTimeout(value=30000)
+@Named(value = "repositoryimpl")
 public class RepositoryImpl implements Repository {
 
     private final static Logger LOGGER = Logger.getLogger(RepositoryImpl.class.toString());
@@ -44,7 +49,11 @@ public class RepositoryImpl implements Repository {
 
     @Override
     @Lock(WRITE)
-    public void addSpot(Spot spot) {
+    public void addSpot() {
+        Spot spot = new Spot();
+        spot.setPlace(5);
+        spot.setTime(new DateTime());
+
         LOGGER.info(()-> "Add spot:" + spot);
         emSpot.getTransaction().begin();
         if(!emSpot.contains(spot)) {
@@ -71,7 +80,14 @@ public class RepositoryImpl implements Repository {
 
     @Override
     @Lock(WRITE)
-    public void addTicket(Ticket ticket) {
+    public void addTicket() {
+        Ticket ticket = new Ticket();
+        DateTime time = new DateTime();
+        ticket.setStart(time);
+        ticket.setCost(20.0);
+        ticket.setEnd(time.plusMinutes(20));
+
+
         LOGGER.info(()-> "Add ticket: " + ticket);
         emSpot.getTransaction().begin();
         LOGGER.info(()-> "Transaction begin: " + ticket);
@@ -106,13 +122,53 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    @Lock(READ)
-    public void test() {
-        return;
-    }
+    public void addSomeType() {
+        Sometype sometype = new Sometype();
+        sometype.setStart(new DateTime());
 
+
+        LOGGER.info(()-> "Add sometype: " + sometype);
+        emSpot.getTransaction().begin();
+        LOGGER.info(()-> "Transaction begin: " + sometype);
+        if(!emSpot.contains(sometype)) {
+            LOGGER.info(()-> "No sometype  in database");
+            emSpot.persist(sometype);
+            LOGGER.info(()-> "sometype persisted: " +sometype);
+            emSpot.flush();
+            LOGGER.info(()-> "Flushed: " + sometype);
+        }
+        emSpot.getTransaction().commit();
+        LOGGER.info(()-> "Transaction commited: " + sometype);
+
+        LOGGER.info(() -> "Added sometype to database: " + sometype);
+
+
+    }
     @Override
-    public void test3() {
+    @Lock(WRITE)
+    public void addTicketReplica() {
+        TicketReplica ticket = new TicketReplica();
+        DateTime time = new DateTime();
+        ticket.setStart(time);
+        ticket.setCost(20.0);
+        ticket.setEnd(time.plusMinutes(20));
+
+
+        LOGGER.info(()-> "Add TicketReplica: " + ticket);
+        emSpot.getTransaction().begin();
+        LOGGER.info(()-> "Transaction begin: " + ticket);
+        if(!emSpot.contains(ticket)) {
+            LOGGER.info(()-> "No TicketReplica in database");
+            emSpot.persist(ticket);
+            LOGGER.info(()-> "TicketReplica persisted: " +ticket);
+            emSpot.flush();
+            LOGGER.info(()-> "Flushed: " + ticket);
+        }
+        emSpot.getTransaction().commit();
+        LOGGER.info(()-> "Transaction commited: " + ticket);
+
+        LOGGER.info(() -> "Added TicketReplica to database: " + ticket);
 
     }
+
 }

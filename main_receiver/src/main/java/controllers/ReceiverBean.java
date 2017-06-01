@@ -134,7 +134,7 @@ public class ReceiverBean {
 
             /* ------------------------PREPARE TICKET JSON ----------------------------*/
             Ticket ticket = new Ticket();
-            ticket.setId(1);
+//            ticket.setId(1);
             ticket.setStart(DateTime.now());
             ticket.setCost(20.0);
             ticket.setEnd(DateTime.now().plusHours(1));
