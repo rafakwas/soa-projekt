@@ -1,50 +1,71 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:a4j="http://richfaces.org/a4j">
 <h:head>
-    <title>Dashboard</title>
+    <title>DASHBOARD</title>
 </h:head>
+
 <h:body>
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="title">XXXXXXXXXXXX</ui:define>
+        <ui:define name="body">
+            <h3>Dashboard</h3>
+            <h:form id="refresher">
+                <a4j:poll id="poll" interval="5000" enabled="#{pollBean.pollEnabled}" render="grid,:non,:on,:ntb,:tb,:nvtb,:vtb,:notifications,:tickets,:occupations" />
+                <h:panelGrid columns="2" width="100%" id="grid">
+                    <h:panelGrid columns="1">
+                        <h:outputText value="Polling Inactive" rendered="#{not pollBean.pollEnabled}" />
+                        <h:outputText value="Polling Active" rendered="#{pollBean.pollEnabled}" />
+                        <a4j:commandButton style="width:120px" id="control" value="#{pollBean.pollEnabled?'Stop':'Start'} Polling"
+                                           render="poll, grid">
+                            <a4j:param name="polling" value="#{!pollBean.pollEnabled}" assignTo="#{pollBean.pollEnabled}" />
+                        </a4j:commandButton>
+                        <h:outputText id="serverDate" style="font-size:16px" value="Server Date: #{pollBean.date}" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
 
-    <h3>Dashboard</h3>
+            <br/>
 
-    <h:outputText value="No spots occupied" rendered="#{empty receiverbean.spots}"/>
-    <h:outputText value="Number of occupied spots: #{receiverbean.occupationNumber}" rendered="#{not empty receiverbean.spots}"/>
+            <h:outputText id="non" value="No spots occupied" rendered="#{empty receiverbean.spots}"/>
+            <h:outputText id="on" value="Number of occupied spots: #{receiverbean.occupationNumber}" rendered="#{not empty receiverbean.spots}"/>
 
-    <br/>
+            <br/>
 
-    <h:outputText value="No tickets bought" rendered="#{empty receiverbean.tickets}"/>
-    <h:outputText value="Number of all tickets: #{receiverbean.ticketNumber}" rendered="#{not empty receiverbean.tickets}"/>
+            <h:outputText id="ntb" value="No tickets bought" rendered="#{empty receiverbean.tickets}"/>
+            <h:outputText id="tb" value="Number of all tickets: #{receiverbean.ticketNumber}" rendered="#{not empty receiverbean.tickets}"/>
 
-    <br/>
+            <br/>
 
-    <h:outputText value="No valid tickets" rendered="#{empty receiverbean.validToTenMinutesTickets}"/>
-    <h:outputText value="Number of valid tickets (up to 10 minutes of expiration): #{receiverbean.validTicketsNumber}" rendered="#{not empty receiverbean.validToTenMinutesTickets}"/>
+            <h:outputText id="nvtb" value="No valid tickets" rendered="#{empty receiverbean.validToTenMinutesTickets}"/>
+            <h:outputText id="vtb" value="Number of valid tickets (up to 10 minutes of expiration): #{receiverbean.validTicketsNumber}" rendered="#{not empty receiverbean.validToTenMinutesTickets}"/>
 
-    <br/>
+            <br/>
 
-    <h:dataTable id="datatable" value="#{receiverbean.notifications}" var="_notification">
-        <h:column>
-            <f:facet name="header">notification</f:facet>
-            #{_notification}
-        </h:column>
-    </h:dataTable>
-
-    <h:dataTable id="occupationTable" value="#{receiverbean.spots}" var="_spot">
-        <h:column>
-            <f:facet name="header">spot</f:facet>
-            #{_spot}
-        </h:column>
-    </h:dataTable>
-    <h:dataTable id="ticketsTable" value="#{receiverbean.validToTenMinutesTickets}" var="_ticket">
-        <h:column>
-            <f:facet name="header">ticket</f:facet>
-            #{_ticket}
-        </h:column>
-    </h:dataTable>
+            <h:dataTable id="notifications" value="#{receiverbean.notifications}" var="_notification">
+                <h:column>
+                    <f:facet name="header">notification</f:facet>
+                    #{_notification}
+                </h:column>
+            </h:dataTable>
+            <h:dataTable id="occupations" value="#{receiverbean.spots}" var="_spot">
+                <h:column>
+                    <f:facet name="header">spot</f:facet>
+                    #{_spot}
+                </h:column>
+            </h:dataTable>
+            <h:dataTable id="tickets" value="#{receiverbean.validToTenMinutesTickets}" var="_ticket">
+                <h:column>
+                    <f:facet name="header">ticket</f:facet>
+                    #{_ticket}
+                </h:column>
+            </h:dataTable>
+        </ui:define>
+    </ui:composition>
 </h:body>
 </html>
