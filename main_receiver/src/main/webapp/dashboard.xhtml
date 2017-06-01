@@ -14,6 +14,12 @@
 
     <h:outputText value="No spots occupied" rendered="#{empty receiverbean.spots}"/>
     <h:outputText value="Number of occupied spots: #{receiverbean.occupationNumber}" rendered="#{not empty receiverbean.spots}"/>
+
+    <br/>
+
+    <h:outputText value="No tickets bought" rendered="#{empty receiverbean.tickets}"/>
+    <h:outputText value="Number of valid tickets: #{receiverbean.ticketNumber}" rendered="#{not empty receiverbean.tickets}"/>
+
     <h:dataTable id="datatable" value="#{receiverbean.notifications}" var="_notification">
         <h:column>
             <f:facet name="header">notification</f:facet>
@@ -27,10 +33,11 @@
             #{_spot}
         </h:column>
     </h:dataTable>
-
-    <h:form>
-        <h:commandButton value="Get ticket" action="#{receiverbean.submit}"/>
-    </h:form>
-
+    <h:dataTable id="ticketsTable" value="#{receiverbean.tickets}" var="_ticket">
+        <h:column>
+            <f:facet name="header">ticket</f:facet>
+            #{_ticket}
+        </h:column>
+    </h:dataTable>
 </h:body>
 </html>

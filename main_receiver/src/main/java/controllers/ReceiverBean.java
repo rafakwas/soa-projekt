@@ -43,6 +43,9 @@ public class ReceiverBean {
     @Inject
     Repository repository;
 
+    private List<Ticket> tickets = new ArrayList<>();
+    private List<Spot> spots = new ArrayList<>();
+
     private List<String> notifications = new ArrayList<>();
 
     public void addNotification(String info) {
@@ -56,129 +59,105 @@ public class ReceiverBean {
     public void setNotifications(List<String> notifications) {
         this.notifications = notifications;
     }
-//
-//    public void addSpot(Spot spot) {
-//
-//        Spot persisted = new Spot();
-//        persisted.setPlace(spot.getId());
-//        persisted.setTime(spot.getTime());
-//
-//        em.getTransaction().begin();
-//        if(!em.contains(persisted)) {
-//            em.persist(persisted);
-//            em.flush();
-//        }
-//        em.getTransaction().commit();
-//        LOGGER.info(() -> "Added spot to database: " + persisted);
-//
-//        String hql = "from Spot where id = :id";
-//        javax.persistence.Query query = em.createQuery(hql).setParameter("id",spot.getId());
-//        Spot result = (Spot)query.getSingleResult();
-//    }
-//
-//    public void removeSpot(Integer place) {
-//        Session session = em.unwrap(Session.class);
-//        String hql = "delete from Spot where place = :place";
-//        Transaction tx = null;
-//        tx = session.beginTransaction();
-//        Query query = session.createQuery(hql).setParameter("place",place);
-//        query.executeUpdate();
-//        tx.commit();
-//    }
 
     public List<Spot> getSpots() {
-        return repository.getAllSpots();
+        spots = repository.getAllSpots();
+        return spots;
     }
 
-    public Integer getOccupationNumber() { return  getSpots().size(); }
+    public List<Ticket> getTickets() {
+        tickets = repository.getAllTickets();
+        return tickets;
+    }
 
+    public Integer getOccupationNumber() { return  spots.size(); }
 
+    public Integer getTicketNumber() { return  tickets.size(); }
 
     private static final String REST_URL = "http://localhost:8080/main_receiver/api/ticket";
     private Client client;
 
-    public void submit() {
-        LOGGER.info(() -> "submit method start");
-        postTicket();
-        LOGGER.info(() -> "submit method end");
-    }
+//    public void submit() {
+//        LOGGER.info(() -> "submit method start");
+//        postTicket();
+//        LOGGER.info(() -> "submit method end");
+//    }
 
-    public void getTicket() {
-        client = ClientBuilder.newClient();
-        WebTarget target = client.target(REST_URL + "/info/1");
-        String jsonString = target.request(MediaType.APPLICATION_JSON).get(String.class);
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JodaModule());
-
-        Ticket ticket = null;
-        try {
-            ticket = mapper.readValue(jsonString, Ticket.class);
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        notifications.add(ticket.toString());
-    }
-
-    public void postTicket() {
-
-            client = ClientBuilder.newClient();
-            WebTarget target = client.target(REST_URL + "/post");
-
-
-
-            /* ------------------------PREPARE TICKET JSON ----------------------------*/
-            Ticket ticket = new Ticket();
-//            ticket.setId(1);
-            ticket.setStart(DateTime.now());
-            ticket.setCost(20.0);
-            ticket.setEnd(DateTime.now().plusHours(1));
-
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JodaModule());
-            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            ObjectWriter ow = mapper.writer();
-            String input= null;
-            try {
-                input = ow.writeValueAsString(ticket);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            /* ------------------------PREPARE TICKET JSON ----------------------------*/
-
-            Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
-            Response response = invocationBuilder.post(Entity.entity(input, MediaType.APPLICATION_JSON));
-
-            LOGGER.info(response.getStatus() + "");
-
-            notifications.add(response.readEntity(String.class));
-
-    }
-
-    public void getTickets() {
-        client = ClientBuilder.newClient();
-        WebTarget target = client.target(REST_URL + "/all");
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JodaModule());
-
-        String jsonString = target.request(MediaType.APPLICATION_JSON).get(String.class);
-
-        List<Ticket> myObjects = null;
-        try {
-            myObjects = mapper.readValue(jsonString, new TypeReference<List<Ticket>>(){});
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        LOGGER.info("received list: " + myObjects.toString());
-        Ticket ticket = myObjects.get(0);
-        LOGGER.info("received list: " + myObjects.toString());
-        notifications.add(myObjects.toString());
-    }
+//    public void getTicket() {
+//        client = ClientBuilder.newClient();
+//        WebTarget target = client.target(REST_URL + "/info/1");
+//        String jsonString = target.request(MediaType.APPLICATION_JSON).get(String.class);
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.registerModule(new JodaModule());
+//
+//        Ticket ticket = null;
+//        try {
+//            ticket = mapper.readValue(jsonString, Ticket.class);
+//        } catch (JsonParseException e) {
+//            e.printStackTrace();
+//        } catch (JsonMappingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        notifications.add(ticket.toString());
+//    }
+//
+//    public void postTicket() {
+//
+//            client = ClientBuilder.newClient();
+//            WebTarget target = client.target(REST_URL + "/post");
+//
+//
+//
+//            /* ------------------------PREPARE TICKET JSON ----------------------------*/
+//            Ticket ticket = new Ticket();
+//            ticket.setStart(DateTime.now());
+//            ticket.setCost(20.0);
+//            ticket.setEnd(DateTime.now().plusHours(1));
+//
+//            ObjectMapper mapper = new ObjectMapper();
+//            mapper.registerModule(new JodaModule());
+//            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+//            ObjectWriter ow = mapper.writer();
+//            String input= null;
+//            try {
+//                input = ow.writeValueAsString(ticket);
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+//            /* ------------------------PREPARE TICKET JSON ----------------------------*/
+//
+//            Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
+//            Response response = invocationBuilder.post(Entity.entity(input, MediaType.APPLICATION_JSON));
+//
+//            LOGGER.info(response.getStatus() + "");
+//
+//            notifications.add(response.readEntity(String.class));
+//
+//    }
+//
+//    public void getTickets() {
+//        client = ClientBuilder.newClient();
+//        WebTarget target = client.target(REST_URL + "/all");
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.registerModule(new JodaModule());
+//
+//        String jsonString = target.request(MediaType.APPLICATION_JSON).get(String.class);
+//
+//        List<Ticket> myObjects = null;
+//        try {
+//            myObjects = mapper.readValue(jsonString, new TypeReference<List<Ticket>>(){});
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        LOGGER.info("received list: " + myObjects.toString());
+//        Ticket ticket = myObjects.get(0);
+//        LOGGER.info("received list: " + myObjects.toString());
+//        notifications.add(myObjects.toString());
+//    }
 }
