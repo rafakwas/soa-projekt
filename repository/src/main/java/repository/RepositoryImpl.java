@@ -24,6 +24,7 @@ import static javax.ejb.LockType.WRITE;
 
 
 @Singleton
+@Startup
 @ConcurrencyManagement(value = ConcurrencyManagementType.CONTAINER)
 @Local(Repository.class)
 @AccessTimeout(value=30000)
@@ -41,7 +42,7 @@ public class RepositoryImpl implements Repository {
     public void init() {
         emfSpot = Persistence.createEntityManagerFactory("hibernate-spot-repository");
         emSpot = emfSpot.createEntityManager();
-        LOGGER.info(() -> "repository.Repository initialization completed");
+        LOGGER.info(() -> "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX repository.Repository initialization completed");
     }
 
 
@@ -87,7 +88,7 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    @Lock(READ)
+    @Lock(WRITE)
     public List<Spot> getAllSpots() {
         String hql = "from Spot";
         javax.persistence.Query query = emSpot.createQuery(hql);
@@ -95,7 +96,7 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    @Lock(READ)
+    @Lock(WRITE)
     public List<Ticket> getAllTickets() {
         String hql = "from Ticket ";
         javax.persistence.Query query = emSpot.createQuery(hql);
@@ -103,13 +104,13 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    @Lock(READ)
+    @Lock(WRITE)
     public List<Ticket> getValidTickets() {
         return getValidTicketsWithExpirationBoundary(0);
     }
 
     @Override
-    @Lock(READ)
+    @Lock(WRITE)
     public List<Ticket> getValidTicketsWithExpirationBoundary(final Integer EXPIRATION) {
         List<Ticket> tickets = getAllTickets();
         List<Ticket> validTickets = new ArrayList<>(tickets.size());
