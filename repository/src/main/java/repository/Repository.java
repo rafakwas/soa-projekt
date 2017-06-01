@@ -13,5 +13,6 @@ public interface Repository {
     void addTicket(Ticket ticket);
     List<Spot> getAllSpots();
     List<Ticket> getAllTickets();
-
+    List<Ticket> getValidTicketsWithExpirationBoundary(final Integer EXPIRATION);
+    List<Ticket> getValidTickets();
 }

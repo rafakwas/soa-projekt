@@ -29,7 +29,7 @@
         <h:panelGrid columns="4">
             <h:outputText value="Duration in minutes" />
             <h:inputText id="duration" value="#{formbean.duration}">
-                <f:validateLongRange minimum="10" maximum="600"/>
+                <f:validateLongRange minimum="1" maximum="600"/>
                 <f:ajax event="keyup" render="messageSpot" />
             </h:inputText>
             <h:message id="durationMessage" for="duration" style="color: red"></h:message>

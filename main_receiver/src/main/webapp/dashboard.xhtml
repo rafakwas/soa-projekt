@@ -18,7 +18,14 @@
     <br/>
 
     <h:outputText value="No tickets bought" rendered="#{empty receiverbean.tickets}"/>
-    <h:outputText value="Number of valid tickets: #{receiverbean.ticketNumber}" rendered="#{not empty receiverbean.tickets}"/>
+    <h:outputText value="Number of all tickets: #{receiverbean.ticketNumber}" rendered="#{not empty receiverbean.tickets}"/>
+
+    <br/>
+
+    <h:outputText value="No valid tickets" rendered="#{empty receiverbean.validToTenMinutesTickets}"/>
+    <h:outputText value="Number of valid tickets (up to 10 minutes of expiration): #{receiverbean.validTicketsNumber}" rendered="#{not empty receiverbean.validToTenMinutesTickets}"/>
+
+    <br/>
 
     <h:dataTable id="datatable" value="#{receiverbean.notifications}" var="_notification">
         <h:column>
@@ -33,7 +40,7 @@
             #{_spot}
         </h:column>
     </h:dataTable>
-    <h:dataTable id="ticketsTable" value="#{receiverbean.tickets}" var="_ticket">
+    <h:dataTable id="ticketsTable" value="#{receiverbean.validToTenMinutesTickets}" var="_ticket">
         <h:column>
             <f:facet name="header">ticket</f:facet>
             #{_ticket}

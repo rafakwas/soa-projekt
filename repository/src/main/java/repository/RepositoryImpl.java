@@ -9,12 +9,15 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.joda.time.DateTime;
 
 import static javax.ejb.LockType.READ;
 import static javax.ejb.LockType.WRITE;
@@ -28,6 +31,7 @@ import static javax.ejb.LockType.WRITE;
 public class RepositoryImpl implements Repository {
 
     private final static Logger LOGGER = Logger.getLogger(RepositoryImpl.class.toString());
+    private final static Integer EXPIRATION = 10;
 
     private EntityManagerFactory emfSpot;
     private EntityManager emSpot;
@@ -60,38 +64,25 @@ public class RepositoryImpl implements Repository {
     @Override
     @Lock(WRITE)
     public void removeSpot(Integer place) {
-        LOGGER.info(() -> "Remove spot place: " + place);
         Session session = emSpot.unwrap(Session.class);
         String hql = "delete from Spot where place = :place";
-        LOGGER.info(() -> "hql created");
         Transaction tx = null;
         tx = session.beginTransaction();
-        LOGGER.info(() -> "transaction began");
         Query query = session.createQuery(hql).setParameter("place", place);
-        LOGGER.info(() -> "query created");
         query.executeUpdate();
-        LOGGER.info(() -> "update execcuted");
         tx.commit();
-        LOGGER.info(() -> "commited");
-
         LOGGER.info(() -> "Spot " + place + "deleted from database");
     }
 
     @Override
     @Lock(WRITE)
     public void addTicket(Ticket ticket) {
-        LOGGER.info(() -> "Add ticket: " + ticket);
         emSpot.getTransaction().begin();
-        LOGGER.info(() -> "Transaction begin: " + ticket);
         if (!emSpot.contains(ticket)) {
-            LOGGER.info(() -> "No ticket in database");
             emSpot.persist(ticket);
-            LOGGER.info(() -> "Ticket persisted: " + ticket);
             emSpot.flush();
-            LOGGER.info(() -> "Flushed: " + ticket);
         }
         emSpot.getTransaction().commit();
-        LOGGER.info(() -> "Transaction commited: " + ticket);
         LOGGER.info(() -> "Added ticket to database: " + ticket);
     }
 
@@ -109,5 +100,20 @@ public class RepositoryImpl implements Repository {
         String hql = "from Ticket ";
         javax.persistence.Query query = emSpot.createQuery(hql);
         return query.getResultList();
+    }
+
+    @Override
+    @Lock(READ)
+    public List<Ticket> getValidTickets() {
+        return getValidTicketsWithExpirationBoundary(0);
+    }
+
+    @Override
+    @Lock(READ)
+    public List<Ticket> getValidTicketsWithExpirationBoundary(final Integer EXPIRATION) {
+        List<Ticket> tickets = getAllTickets();
+        List<Ticket> validTickets = new ArrayList<>(tickets.size());
+        validTickets.addAll(tickets.stream().filter(ticket -> ticket.getEnd().plusMinutes(EXPIRATION).isAfterNow()).collect(Collectors.toList()));
+        return validTickets;
     }
 }
