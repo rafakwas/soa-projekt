@@ -28,7 +28,6 @@ public class SoapService {
     public void notifyOccupation(Spot spot) {
         LOGGER.info("spot occupation receiver: " + spot);
         receiverBean.addNotification("miejsce zajete");
-//        receiverBean.addSpot(spot);
         repository.addSpot(spot);
     }
 
@@ -36,8 +35,6 @@ public class SoapService {
     public void notifyVacation(Integer id) {
         LOGGER.info("spot vacation receiver: " + id);
         receiverBean.addNotification("miejsce " + id + " opuszczone");
-//        receiverBean.removeSpot(id);
-        repository.test();
         LOGGER.info("repository test passed");
         repository.removeSpot(id);
     }

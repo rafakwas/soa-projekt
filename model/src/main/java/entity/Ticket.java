@@ -16,9 +16,9 @@ public class Ticket{
     @Column(updatable = false)
     private Integer id;
 
-    @Column(name = "start")
+    @Column(name = "start_date")
     private DateTime start;
-    @Column(name = "end")
+    @Column(name = "end_date")
     private DateTime end;
     @Column(name = "cost")
     private Double cost;

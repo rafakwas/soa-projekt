@@ -136,9 +136,6 @@ public class TicketRest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        repository.test3();
         repository.addTicket(ticket);
 
         String output = ticket.getStart().getHourOfDay()+":"+ticket.getStart().getMinuteOfHour()+":"+ticket.getStart().getSecondOfMinute();
