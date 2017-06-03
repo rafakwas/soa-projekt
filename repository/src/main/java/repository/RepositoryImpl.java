@@ -145,8 +145,8 @@ public class RepositoryImpl implements Repository {
             else {
                 LOGGER.info("Spot is occupied and ticket is expired. Inform event detector!");
                 LOGGER.info("Event detector is being informed.....");
-                sendMessage("TICKET EXPIRATION: place " + ticketExpirationAction.getPlace());
                 // TODO send JMS message here: ticket expired and car from :place = place is still occupying spot
+                sendMessage("TICKET EXPIRATION: place " + ticketExpirationAction.getPlace());
             }
         }
     }
