@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.jms.JMSContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -48,6 +49,14 @@ public class RepositoryImpl implements Repository {
 
     @Resource
     TimerService timerService;
+
+    /*----------------MESSAGE DRIVEN BEAN PART-----------------------------*/
+    @Resource(mappedName = "java:/project/RepositoryToNotifierQueue")
+    javax.jms.Queue queue;
+    @Inject
+    JMSContext jmsContext;
+    /*----------------MESSAGE DRIVEN BEAN PART-----------------------------*/
+
 
     @PostConstruct
     public void init() {
@@ -118,6 +127,7 @@ public class RepositoryImpl implements Repository {
             if (ticket == null) {
                 LOGGER.info("No ticket found for place " + place + ". Event detector is being informed!");
                 //TODO send JMS message here: new car from :place = place didn't pay for spot
+                sendMessage("TICKET NOT BOUGHT: PLACE " + place);
             }
             else {
                 LOGGER.info("Found ticket for place " + place + ". Event detector won't be informed!. Ticket: " + ticket);
@@ -135,6 +145,7 @@ public class RepositoryImpl implements Repository {
             else {
                 LOGGER.info("Spot is occupied and ticket is expired. Inform event detector!");
                 LOGGER.info("Event detector is being informed.....");
+                sendMessage("TICKET EXPIRATION: place " + ticketExpirationAction.getPlace());
                 // TODO send JMS message here: ticket expired and car from :place = place is still occupying spot
             }
         }
@@ -250,6 +261,12 @@ public class RepositoryImpl implements Repository {
         }
 
         triggerTicketExpirationAction(shortestTicket);
-
     }
+
+
+    @Override
+    public void sendMessage(String text) {
+        jmsContext.createProducer().send(queue,text);
+    }
+
 }

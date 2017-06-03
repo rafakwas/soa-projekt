@@ -17,4 +17,5 @@ public interface Repository {
     List<Ticket> getValidTickets();
     Ticket findTicketByPlace(Integer place);
     Spot findSpotByPlace(Integer place);
+    void sendMessage(String text);
 }

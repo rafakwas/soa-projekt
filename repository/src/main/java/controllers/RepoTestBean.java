@@ -11,9 +11,11 @@ import entity.Ticket;
 import org.joda.time.DateTime;
 import repository.Repository;
 
+import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.jms.JMSContext;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -34,6 +36,7 @@ public class RepoTestBean implements Serializable {
     @Inject
     Repository repository;
 
+
     public void occupy() {
         DateTime time = new DateTime();
         LOGGER.info(() -> "New spot occupied. Place: " + id + ".Time: " + time);
@@ -47,7 +50,6 @@ public class RepoTestBean implements Serializable {
 
     public void vacate(Integer place) {
         LOGGER.info(() -> "Spot vacated. Place: " + place);
-
         repository.removeSpot(place);
     }
 
@@ -58,6 +60,10 @@ public class RepoTestBean implements Serializable {
         ticket.setPlace(ticketPlace);
         ticket.setEnd(DateTime.now().plusMinutes(duration));
         repository.addTicket(ticket);
+    }
+
+    public void sendTestMessage() {
+        repository.sendMessage("TEST TEST TEST TEST");
     }
 
     /* GETTERS & SETTERS */
