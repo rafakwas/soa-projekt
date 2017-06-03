@@ -37,8 +37,8 @@ import static javax.ejb.LockType.WRITE;
 @Named(value = "repositoryimpl")
 public class RepositoryImpl implements Repository {
     private final static Logger LOGGER = Logger.getLogger(RepositoryImpl.class.toString());
-    private final static Integer EXPIRATION = 10;
-    private final static Integer SPOT_WITH_NO_TICKET_EXPIRATION = 10;
+    private final static Integer SPOT_WITH_NO_TICKET_EXPIRATION = 30; // TODO seconds!
+
     private EntityManagerFactory emfSpot;
     private EntityManager emSpot;
 
@@ -117,6 +117,7 @@ public class RepositoryImpl implements Repository {
             Ticket ticket = findTicketByPlace(place);
             if (ticket == null) {
                 LOGGER.info("No ticket found for place " + place + ". Event detector is being informed!");
+                //TODO send JMS message here: new car from :place = place didn't pay for spot
             }
             else {
                 LOGGER.info("Found ticket for place " + place + ". Event detector won't be informed!. Ticket: " + ticket);
@@ -134,6 +135,7 @@ public class RepositoryImpl implements Repository {
             else {
                 LOGGER.info("Spot is occupied and ticket is expired. Inform event detector!");
                 LOGGER.info("Event detector is being informed.....");
+                // TODO send JMS message here: ticket expired and car from :place = place is still occupying spot
             }
         }
     }
