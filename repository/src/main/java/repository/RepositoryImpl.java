@@ -85,10 +85,10 @@ public class RepositoryImpl implements Repository {
     }
 
     public void triggerTicketExpirationAction(Ticket ticket) {
-        TicketExpirationAction ticketExpirationAction = new TicketExpirationAction(ticket.getId());
+        TicketExpirationAction ticketExpirationAction = new TicketExpirationAction(ticket.getPlace());
         ticketTimer = timerService.createTimer(ticket.getEnd().toDate(),ticketExpirationAction);
         LOGGER.info("Setting a programmatic timeout to "
-                + ticket.getEnd() + ". TicketExpirationAction scheduled for ticket id " + ticketExpirationAction.getId());
+                + ticket.getEnd() + ". TicketExpirationAction scheduled for ticket place " + ticketExpirationAction.getPlace());
         Ticket first = ticketSortedSet.first();
         LOGGER.info("first ticket: " + first);
         assert first == shortestTicket;
@@ -126,7 +126,15 @@ public class RepositoryImpl implements Repository {
         if (info instanceof TicketExpirationAction) {
             LOGGER.info("Ticket expiration action");
             TicketExpirationAction ticketExpirationAction = (TicketExpirationAction)info;
-            LOGGER.info("Checking whether spot with id " + ticketExpirationAction.getId() + " is still occupied. If it is, event detector will get informed");
+            LOGGER.info("Checking whether spot place " + ticketExpirationAction.getPlace() + "....");
+            Spot spot = findSpotByPlace(ticketExpirationAction.getPlace());
+            if (spot == null) {
+                LOGGER.info("Spot is not occupied.");
+            }
+            else {
+                LOGGER.info("Spot is occupied and ticket is expired. Inform event detector!");
+                LOGGER.info("Event detector is being informed.....");
+            }
         }
     }
 
@@ -199,6 +207,19 @@ public class RepositoryImpl implements Repository {
             ticket = (Ticket)results.get(0);
         }
         return ticket;
+    }
+
+    @Override
+    @Lock(WRITE)
+    public Spot findSpotByPlace(Integer place) {
+        String hql = "from Spot where place = :place";
+        javax.persistence.Query query = emSpot.createQuery(hql).setParameter("place",place);
+        List results = query.getResultList();
+        Spot spot = null;
+        if (!results.isEmpty()) {
+            spot = (Spot) results.get(0);
+        }
+        return spot;
     }
 
     private void shortestTicketProcedure(Ticket ticket) {

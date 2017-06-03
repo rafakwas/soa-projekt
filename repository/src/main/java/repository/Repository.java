@@ -16,4 +16,5 @@ public interface Repository {
     List<Ticket> getValidTicketsWithExpirationBoundary(final Integer EXPIRATION);
     List<Ticket> getValidTickets();
     Ticket findTicketByPlace(Integer place);
+    Spot findSpotByPlace(Integer place);
 }

@@ -3,13 +3,13 @@ package utils;
 import java.io.Serializable;
 
 public class TicketExpirationAction implements Serializable {
-    Integer id;
+    Integer place;
 
-    public TicketExpirationAction(Integer id) {
-        this.id = id;
+    public TicketExpirationAction(Integer place) {
+        this.place = place;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getPlace() {
+        return place;
     }
 }
