@@ -11,8 +11,11 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -20,6 +23,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.joda.time.DateTime;
+import utils.NewCarAction;
+import utils.TicketExpirationAction;
 
 import static javax.ejb.LockType.READ;
 import static javax.ejb.LockType.WRITE;
@@ -37,11 +42,16 @@ public class RepositoryImpl implements Repository {
     private EntityManagerFactory emfSpot;
     private EntityManager emSpot;
 
+    private Ticket shortestTicket;
+    private SortedSet<Ticket> ticketSortedSet;
+    private Timer ticketTimer;
+
     @Resource
     TimerService timerService;
 
     @PostConstruct
     public void init() {
+        ticketSortedSet = new TreeSet<>(((o1, o2) -> o1.getEnd().compareTo(o2.getEnd())));
         emfSpot = Persistence.createEntityManagerFactory("hibernate-spot-repository");
         emSpot = emfSpot.createEntityManager();
         LOGGER.info(() -> "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX repository.Repository initialization completed");
@@ -63,26 +73,60 @@ public class RepositoryImpl implements Repository {
         emSpot.getTransaction().commit();
         LOGGER.info(() -> "Added spot to database: " + spot);
         LOGGER.info("Scheduled for ticket lookup for spot number " + spot.getPlace() + " in " + SPOT_WITH_NO_TICKET_EXPIRATION + "seconds");
-        triggerTimer(spot.getPlace());
+        triggerNewCarAction(spot.getPlace());
     }
 
-    public void triggerTimer(Integer place) {
+    public void triggerNewCarAction(Integer place) {
         long intervalDuration = SPOT_WITH_NO_TICKET_EXPIRATION*1000;
         LOGGER.info("Setting a programmatic timeout for "
-                + intervalDuration + " milliseconds from now. Scheduled for place " + place);
-        Timer timer = timerService.createTimer(intervalDuration, place);
+                + intervalDuration + " milliseconds from now. NewCarAction scheduled for place " + place);
+        NewCarAction newCarAction = new NewCarAction(place);
+        timerService.createTimer(intervalDuration, newCarAction);
     }
+
+    public void triggerTicketExpirationAction(Ticket ticket) {
+        TicketExpirationAction ticketExpirationAction = new TicketExpirationAction(ticket.getId());
+        ticketTimer = timerService.createTimer(ticket.getEnd().toDate(),ticketExpirationAction);
+        LOGGER.info("Setting a programmatic timeout to "
+                + ticket.getEnd() + ". TicketExpirationAction scheduled for ticket id " + ticketExpirationAction.getId());
+        Ticket first = ticketSortedSet.first();
+        LOGGER.info("first ticket: " + first);
+        assert first == shortestTicket;
+        LOGGER.info("assert passed");
+        ticketSortedSet.remove(first);
+        LOGGER.info("first ticket removed");
+
+        if (ticketSortedSet.isEmpty()) {
+            shortestTicket = null;
+        }
+        else {
+            shortestTicket = ticketSortedSet.first();
+        }
+
+        LOGGER.info("new shortest ticket initialized: " + shortestTicket);
+    };
+
 
     @Timeout
     public void programmaticTimeout(Timer timer) {
-        Integer place = (Integer)timer.getInfo();
-        LOGGER.info("Programmatic timeout occurred. Looking up to ticket for place " + place + " in database");
-        Ticket ticket = findTicketByPlace(place);
-        if (ticket == null) {
-            LOGGER.info("No ticket found for place " + place + ". Event detector is being informed!");
+        Serializable info = timer.getInfo();
+        if (info instanceof NewCarAction) {
+            NewCarAction newCarAction = (NewCarAction)info;
+            Integer place = newCarAction.getPlace();
+            LOGGER.info("Programmatic timeout occurred. Looking up to ticket for place " + place + " in database");
+            Ticket ticket = findTicketByPlace(place);
+            if (ticket == null) {
+                LOGGER.info("No ticket found for place " + place + ". Event detector is being informed!");
+            }
+            else {
+                LOGGER.info("Found ticket for place " + place + ". Event detector won't be informed!. Ticket: " + ticket);
+            }
         }
-        else {
-            LOGGER.info("Found ticket for place " + place + ". Event detector won't be informed!. Ticket: " + ticket);
+
+        if (info instanceof TicketExpirationAction) {
+            LOGGER.info("Ticket expiration action");
+            TicketExpirationAction ticketExpirationAction = (TicketExpirationAction)info;
+            LOGGER.info("Checking whether spot with id " + ticketExpirationAction.getId() + " is still occupied. If it is, event detector will get informed");
         }
     }
 
@@ -109,6 +153,8 @@ public class RepositoryImpl implements Repository {
         }
         emSpot.getTransaction().commit();
         LOGGER.info(() -> "Added ticket to database: " + ticket);
+
+        shortestTicketProcedure(ticket);
     }
 
     @Override
@@ -153,5 +199,34 @@ public class RepositoryImpl implements Repository {
             ticket = (Ticket)results.get(0);
         }
         return ticket;
+    }
+
+    private void shortestTicketProcedure(Ticket ticket) {
+        LOGGER.info(()->"shortestTicketProcedure for ticket " + ticket + " and shortestTicket: " + shortestTicket);
+        ticketSortedSet.add(ticket);
+        boolean first_ticket = false;
+        if(shortestTicket == null) {
+            shortestTicket = ticket;
+            LOGGER.info(()->"shortest ticket initialized to " + ticket);
+            first_ticket = true;
+        }
+        else {
+            if (shortestTicket.getEnd().isAfter(ticket.getEnd())) {
+                shortestTicket = ticket;
+                LOGGER.info(() -> "shortest ticket changed to " + ticket);
+            } else {
+                LOGGER.info(() -> "unchanged");
+                return;
+            }
+        }
+        LOGGER.info("Is it first ticket? " + first_ticket);
+
+        if(!first_ticket) {
+            LOGGER.info("ticketTimer is canceled: " + ticketTimer.getSchedule());
+            ticketTimer.cancel();
+        }
+
+        triggerTicketExpirationAction(shortestTicket);
+
     }
 }
