@@ -24,16 +24,26 @@
                              value="Occupy"></h:commandButton>
             </h:panelGrid>
     </h:form>
+    <h:form id="timer">
+        <h2>Trigger timer</h2>
+        <h:commandButton action="#{formbean.triggerTimer}" value="Timer set..."/>
+    </h:form>
     <h:form id="ticket">
         <h2>Buy ticket</h2>
         <h:panelGrid columns="4">
             <h:outputText value="Duration in minutes" />
             <h:inputText id="duration" value="#{formbean.duration}">
                 <f:validateLongRange minimum="1" maximum="600"/>
-                <f:ajax event="keyup" render="messageSpot" />
+                <f:ajax event="keyup" render="durationMessage" />
             </h:inputText>
             <h:message id="durationMessage" for="duration" style="color: red"></h:message>
             <br />
+            <h:outputText value="Ticket place" />
+            <h:inputText id="ticket_place" value="#{formbean.ticket_place}">
+                <f:validateLongRange minimum="0" maximum="19"/>
+                <f:ajax event="keyup" render="ticket_place_message"/>
+            </h:inputText>
+            <h:message for="ticket_place" id="ticket_place_message" style="color: red"/>
             <h:commandButton action="#{formbean.buyTicket}"
                              value="Buy ticket"></h:commandButton>
         </h:panelGrid>

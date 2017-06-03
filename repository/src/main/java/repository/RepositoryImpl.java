@@ -4,7 +4,9 @@ import entity.Spot;
 import entity.Ticket;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.*;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,19 +26,19 @@ import static javax.ejb.LockType.WRITE;
 
 
 @Singleton
-@Startup
 @ConcurrencyManagement(value = ConcurrencyManagementType.CONTAINER)
 @Local(Repository.class)
 @AccessTimeout(value=30000)
 @Named(value = "repositoryimpl")
 public class RepositoryImpl implements Repository {
-
     private final static Logger LOGGER = Logger.getLogger(RepositoryImpl.class.toString());
     private final static Integer EXPIRATION = 10;
-
+    private final static Integer SPOT_WITH_NO_TICKET_EXPIRATION = 10;
     private EntityManagerFactory emfSpot;
     private EntityManager emSpot;
 
+    @Resource
+    TimerService timerService;
 
     @PostConstruct
     public void init() {
@@ -60,6 +62,28 @@ public class RepositoryImpl implements Repository {
         }
         emSpot.getTransaction().commit();
         LOGGER.info(() -> "Added spot to database: " + spot);
+        LOGGER.info("Scheduled for ticket lookup for spot number " + spot.getPlace() + " in " + SPOT_WITH_NO_TICKET_EXPIRATION + "seconds");
+        triggerTimer(spot.getPlace());
+    }
+
+    public void triggerTimer(Integer place) {
+        long intervalDuration = SPOT_WITH_NO_TICKET_EXPIRATION*1000;
+        LOGGER.info("Setting a programmatic timeout for "
+                + intervalDuration + " milliseconds from now. Scheduled for place " + place);
+        Timer timer = timerService.createTimer(intervalDuration, place);
+    }
+
+    @Timeout
+    public void programmaticTimeout(Timer timer) {
+        Integer place = (Integer)timer.getInfo();
+        LOGGER.info("Programmatic timeout occurred. Looking up to ticket for place " + place + " in database");
+        Ticket ticket = findTicketByPlace(place);
+        if (ticket == null) {
+            LOGGER.info("No ticket found for place " + place + ". Event detector is being informed!");
+        }
+        else {
+            LOGGER.info("Found ticket for place " + place + ". Event detector won't be informed!. Ticket: " + ticket);
+        }
     }
 
     @Override
@@ -116,5 +140,18 @@ public class RepositoryImpl implements Repository {
         List<Ticket> validTickets = new ArrayList<>(tickets.size());
         validTickets.addAll(tickets.stream().filter(ticket -> ticket.getEnd().plusMinutes(EXPIRATION).isAfterNow()).collect(Collectors.toList()));
         return validTickets;
+    }
+
+    @Override
+    @Lock(WRITE)
+    public Ticket findTicketByPlace(Integer place) {
+        String hql = "from Ticket where place = :place";
+        javax.persistence.Query query = emSpot.createQuery(hql).setParameter("place",place);
+        List results = query.getResultList();
+        Ticket ticket = null;
+        if (!results.isEmpty()) {
+            ticket = (Ticket)results.get(0);
+        }
+        return ticket;
     }
 }

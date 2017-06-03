@@ -11,8 +11,8 @@ import generated.SoapService;
 import generated.SoapServiceService;
 import org.joda.time.DateTime;
 
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.annotation.Resource;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.client.*;
@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -31,10 +32,28 @@ public class FormBean implements Serializable {
     private static List<generated.Spot> occupied = new ArrayList<>();
     private Integer id;
     private Integer duration;
+    private Integer ticket_place;
 
+    @Resource
+    TimerService timerService;
+
+    private final static Integer SPOT_WITH_NO_TICKET_EXPIRATION = 2;
     private static final String REST_URL = "http://localhost:8080/main_receiver/api/ticket";
     private Client client;
 
+    public void triggerTimer() {
+        long intervalDuration = 10000;
+        LOGGER.info("Setting a programmatic timeout for "
+                + intervalDuration + " milliseconds from now.");
+        Integer x = 5;
+        Timer timer = timerService.createTimer(intervalDuration, x);
+    }
+
+    @Timeout
+    public void programmaticTimeout(Timer timer) {
+        Integer passed = (Integer)timer.getInfo();
+        LOGGER.info("Programmatic timeout occurred. Info: passed equals" + passed);
+    }
 
     public void occupy() {
         generated.DateTime time = new generated.DateTime();
@@ -73,6 +92,7 @@ public class FormBean implements Serializable {
         Ticket ticket = new Ticket();
         ticket.setStart(DateTime.now());
         ticket.setCost(0.5*duration.doubleValue());
+        ticket.setPlace(ticket_place);
         ticket.setEnd(DateTime.now().plusMinutes(duration));
 
         ObjectMapper mapper = new ObjectMapper();
@@ -90,8 +110,8 @@ public class FormBean implements Serializable {
         Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.post(Entity.entity(input, MediaType.APPLICATION_JSON));
 
-        LOGGER.info(response.getStatus() + "");
-        LOGGER.info(response.readEntity(String.class) + "");
+//        LOGGER.info(response.getStatus() + "");
+//        LOGGER.info(response.readEntity(String.class) + "");
     }
 
     /* GETTERS & SETTERS */
@@ -113,6 +133,15 @@ public class FormBean implements Serializable {
     }
 
     public void setDuration(Integer duration) {
+
         this.duration = duration;
+    }
+
+    public Integer getTicket_place() {
+        return ticket_place;
+    }
+
+    public void setTicket_place(Integer ticket_place) {
+        this.ticket_place = ticket_place;
     }
 }

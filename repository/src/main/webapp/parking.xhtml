@@ -9,8 +9,40 @@
     <title>Parking</title>
 </h:head>
 <h:body>
+
     <h:form id="addbook">
-        <h2>Occupy spot</h2>
+            <h2>Occupy spot</h2>
+        <h:panelGrid columns="4">
+            <h:outputText value="Spot" />
+            <h:inputText id="spot" value="#{repotestbean.id}">
+                <f:validateLongRange minimum="0" maximum="19"/>
+                <f:ajax event="keyup" render="messageSpot" />
+            </h:inputText>
+            <h:message id="messasgeSpot" for="spot" style="color: red"></h:message>
+            <br />
+            <h:commandButton action="#{repotestbean.occupy}"
+                             value="Occupy"></h:commandButton>
+            </h:panelGrid>
+    </h:form>
+    <h:form id="ticket">
+        <h2>Buy ticket</h2>
+        <h:panelGrid columns="4">
+            <h:outputText value="Duration in minutes" />
+            <h:inputText id="duration" value="#{repotestbean.duration}">
+                <f:validateLongRange minimum="1" maximum="600"/>
+                <f:ajax event="keyup" render="durationMessage" />
+            </h:inputText>
+            <h:message id="durationMessage" for="duration" style="color: red"></h:message>
+            <br />
+            <h:outputText value="Ticket place" />
+            <h:inputText id="ticket_place" value="#{repotestbean.ticketPlace}">
+                <f:validateLongRange minimum="0" maximum="19"/>
+                <f:ajax event="keyup" render="ticket_place_message"/>
+            </h:inputText>
+            <h:message for="ticket_place" id="ticket_place_message" style="color: red"/>
+            <h:commandButton action="#{repotestbean.buyTicket}"
+                             value="Buy ticket"></h:commandButton>
+        </h:panelGrid>
     </h:form>
 </h:body>
 </html>

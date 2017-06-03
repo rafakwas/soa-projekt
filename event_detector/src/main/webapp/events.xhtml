@@ -15,7 +15,7 @@
         <ui:define name="title">Events detector</ui:define>
         <ui:define name="body">
             <h:form id="refresher">
-                <a4j:poll id="poll" interval="5000" enabled="#{pollBean.pollEnabled}" render="grid,:occupations,:tickets" />
+                <a4j:poll id="poll" interval="5000" enabled="#{pollBean.pollEnabled}" render="grid,:occupations,:tickets,:notifications" />
                 <h:panelGrid columns="2" width="100%" id="grid">
                     <h:panelGrid columns="1">
                         <h:outputText value="Polling Inactive" rendered="#{not pollBean.pollEnabled}" />
@@ -29,16 +29,22 @@
                 </h:panelGrid>
             </h:form>
             <h3>Events</h3>
-            <h:dataTable id="occupations" value="#{eventsbean.spots}" var="_spot">
+            <h:dataTable id="occupations" value="#{eventsbeanimpl.spots}" var="_spot">
                 <h:column>
                     <f:facet name="header">spot</f:facet>
                     #{_spot}
                 </h:column>
             </h:dataTable>
-            <h:dataTable id="tickets" value="#{eventsbean.tickets}" var="_ticket">
+            <h:dataTable id="tickets" value="#{eventsbeanimpl.tickets}" var="_ticket">
                 <h:column>
                     <f:facet name="header">ticket</f:facet>
                     #{_ticket}
+                </h:column>
+            </h:dataTable>
+            <h:dataTable id="notifications" value="#{eventsbeanimpl.notifications}" var="_notification">
+                <h:column>
+                    <f:facet name="header">notification</f:facet>
+                    #{_notification}
                 </h:column>
             </h:dataTable>
         </ui:define>

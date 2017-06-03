@@ -16,6 +16,8 @@ public class Ticket{
     @Column(updatable = false)
     private Integer id;
 
+    @Column(name = "place")
+    private Integer place;
     @Column(name = "start_date")
     private DateTime start;
     @Column(name = "end_date")
@@ -60,10 +62,19 @@ public class Ticket{
         this.cost = cost;
     }
 
+    public Integer getPlace() {
+        return place;
+    }
+
+    public void setPlace(Integer place) {
+        this.place = place;
+    }
+
     @Override
     public String toString() {
         return "Ticket{" +
                 "id=" + id +
+                ", place=" + place +
                 ", start=" + start +
                 ", end=" + end +
                 ", cost=" + cost +
