@@ -19,6 +19,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.ws.rs.client.*;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -85,8 +86,9 @@ public class RaportBeanImpl implements Serializable,RaportBean{
         WebTarget target = client.target(REST_URL + "/allspots");
         Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.get();
-        List<entity.Spot> spots = response.readEntity(List.class);
-        pushMessage("Rest all spots: " + spots);
+        List<String> spotsJson = response.readEntity(new GenericType<List<String>>(){});
+        List<entity.Spot> spots = mapStringsToSpots(spotsJson);
+        pushMessage(""+spots);
         return spots;
     }
 
@@ -96,26 +98,9 @@ public class RaportBeanImpl implements Serializable,RaportBean{
         WebTarget target = client.target(REST_URL + "/alltickets");
         Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.get();
-        List<entity.Ticket> tickets = response.readEntity(List.class);
-        List<entity.Ticket> result = new ArrayList<>(tickets.size());
-        pushMessage("Rest all tickets: " + tickets);
-
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.registerModule(new JodaModule());
-//        for (String ticketJson: tickets) {
-//            entity.Ticket ticket = null;
-//            try {
-//                ticket = mapper.readValue(ticketJson, entity.Ticket.class);
-//            } catch (JsonParseException e) {
-//                e.printStackTrace();
-//            } catch (JsonMappingException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            result.add(ticket);
-//        }
-//        return result;
+        List<String> ticketsJson = response.readEntity(new GenericType<List<String>>(){});
+        List<entity.Ticket> tickets = mapStringsToTickets(ticketsJson);
+        pushMessage(""+tickets);
         return tickets;
     }
 
@@ -142,9 +127,52 @@ public class RaportBeanImpl implements Serializable,RaportBean{
     }
 
     /*------------------UTILS----------------------*/
-    public void pushMessage(String text) {
+    private void pushMessage(String text) {
         FacesMessage message = new FacesMessage(text);
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    private List<entity.Ticket> mapStringsToTickets(List<String> ticketsJson) {
+        List<entity.Ticket> tickets = new ArrayList<>();
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JodaModule());
+
+        for(String json : ticketsJson) {
+            entity.Ticket ticket = null;
+            try {
+                ticket = mapper.readValue(json, entity.Ticket.class);
+            } catch (JsonParseException e) {
+                e.printStackTrace();
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            tickets.add(ticket);
+        }
+        return tickets;
+    }
+    private List<entity.Spot> mapStringsToSpots(List<String> spotsJson) {
+        List<entity.Spot> spots = new ArrayList<>();
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JodaModule());
+
+        for(String json : spotsJson) {
+            entity.Spot spot = null;
+            try {
+                spot = mapper.readValue(json, entity.Spot.class);
+            } catch (JsonParseException e) {
+                e.printStackTrace();
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            spots.add(spot);
+        }
+        return spots;
+
     }
 
 
