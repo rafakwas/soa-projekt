@@ -1,0 +1,291 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://soap.api/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="ExternalSoapServiceService" targetNamespace="http://soap.api/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://soap.api/" elementFormDefault="unqualified" targetNamespace="http://soap.api/" version="1.0">
+
+  <xs:element name="findSpotByPlace" type="tns:findSpotByPlace"/>
+
+  <xs:element name="findSpotByPlaceResponse" type="tns:findSpotByPlaceResponse"/>
+
+  <xs:element name="findTicketByPlace" type="tns:findTicketByPlace"/>
+
+  <xs:element name="findTicketByPlaceResponse" type="tns:findTicketByPlaceResponse"/>
+
+  <xs:element name="getAllSpots" type="tns:getAllSpots"/>
+
+  <xs:element name="getAllSpotsNumber" type="tns:getAllSpotsNumber"/>
+
+  <xs:element name="getAllSpotsNumberResponse" type="tns:getAllSpotsNumberResponse"/>
+
+  <xs:element name="getAllSpotsResponse" type="tns:getAllSpotsResponse"/>
+
+  <xs:element name="getAllTickets" type="tns:getAllTickets"/>
+
+  <xs:element name="getAllTicketsResponse" type="tns:getAllTicketsResponse"/>
+
+  <xs:element name="getTicketsNumber" type="tns:getTicketsNumber"/>
+
+  <xs:element name="getTicketsNumberResponse" type="tns:getTicketsNumberResponse"/>
+
+  <xs:element name="ticket" type="tns:ticket"/>
+
+  <xs:complexType name="getAllSpotsNumber">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getAllSpotsNumberResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAllSpots">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getAllSpotsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:spot"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="spot">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="place" type="xs:int"/>
+      <xs:element minOccurs="0" name="time" type="tns:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType final="extension restriction" name="dateTime">
+    <xs:complexContent>
+      <xs:extension base="tns:baseDateTime">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType abstract="true" name="baseDateTime">
+    <xs:complexContent>
+      <xs:extension base="tns:abstractDateTime">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType abstract="true" name="abstractDateTime">
+    <xs:complexContent>
+      <xs:extension base="tns:abstractInstant">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType abstract="true" name="abstractInstant">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="findTicketByPlace">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findTicketByPlaceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ticket"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ticket">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cost" type="xs:double"/>
+      <xs:element minOccurs="0" name="end" type="tns:dateTime"/>
+      <xs:element minOccurs="0" name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="place" type="xs:int"/>
+      <xs:element minOccurs="0" name="start" type="tns:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getTicketsNumber">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getTicketsNumberResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findSpotByPlace">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findSpotByPlaceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:spot"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getAllTickets">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getAllTicketsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:ticket"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getAllSpotsNumber">
+    <wsdl:part element="tns:getAllSpotsNumber" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllSpots">
+    <wsdl:part element="tns:getAllSpots" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findTicketByPlaceResponse">
+    <wsdl:part element="tns:findTicketByPlaceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findTicketByPlace">
+    <wsdl:part element="tns:findTicketByPlace" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTicketsNumber">
+    <wsdl:part element="tns:getTicketsNumber" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTicketsNumberResponse">
+    <wsdl:part element="tns:getTicketsNumberResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllTicketsResponse">
+    <wsdl:part element="tns:getAllTicketsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllSpotsResponse">
+    <wsdl:part element="tns:getAllSpotsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findSpotByPlace">
+    <wsdl:part element="tns:findSpotByPlace" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findSpotByPlaceResponse">
+    <wsdl:part element="tns:findSpotByPlaceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllSpotsNumberResponse">
+    <wsdl:part element="tns:getAllSpotsNumberResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllTickets">
+    <wsdl:part element="tns:getAllTickets" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ExternalSoapService">
+    <wsdl:operation name="getAllSpotsNumber">
+      <wsdl:input message="tns:getAllSpotsNumber" name="getAllSpotsNumber">
+    </wsdl:input>
+      <wsdl:output message="tns:getAllSpotsNumberResponse" name="getAllSpotsNumberResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllSpots">
+      <wsdl:input message="tns:getAllSpots" name="getAllSpots">
+    </wsdl:input>
+      <wsdl:output message="tns:getAllSpotsResponse" name="getAllSpotsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findTicketByPlace">
+      <wsdl:input message="tns:findTicketByPlace" name="findTicketByPlace">
+    </wsdl:input>
+      <wsdl:output message="tns:findTicketByPlaceResponse" name="findTicketByPlaceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTicketsNumber">
+      <wsdl:input message="tns:getTicketsNumber" name="getTicketsNumber">
+    </wsdl:input>
+      <wsdl:output message="tns:getTicketsNumberResponse" name="getTicketsNumberResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findSpotByPlace">
+      <wsdl:input message="tns:findSpotByPlace" name="findSpotByPlace">
+    </wsdl:input>
+      <wsdl:output message="tns:findSpotByPlaceResponse" name="findSpotByPlaceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllTickets">
+      <wsdl:input message="tns:getAllTickets" name="getAllTickets">
+    </wsdl:input>
+      <wsdl:output message="tns:getAllTicketsResponse" name="getAllTicketsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ExternalSoapServiceServiceSoapBinding" type="tns:ExternalSoapService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getAllSpotsNumber">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAllSpotsNumber">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllSpotsNumberResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllSpots">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAllSpots">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllSpotsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findTicketByPlace">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="findTicketByPlace">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findTicketByPlaceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTicketsNumber">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTicketsNumber">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTicketsNumberResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findSpotByPlace">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="findSpotByPlace">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findSpotByPlaceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllTickets">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAllTickets">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllTicketsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ExternalSoapServiceService">
+    <wsdl:port binding="tns:ExternalSoapServiceServiceSoapBinding" name="ExternalSoapServicePort">
+      <soap:address location="http://localhost:8080/repository/ExternalSoapService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

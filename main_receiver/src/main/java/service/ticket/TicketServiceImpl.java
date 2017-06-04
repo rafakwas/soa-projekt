@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 @Stateless
 @Local(TicketService.class)
+@Deprecated
 public class TicketServiceImpl implements TicketService{
     private final static Logger LOGGER = Logger.getLogger(TicketServiceImpl.class.toString());
 
