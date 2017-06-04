@@ -1,10 +1,18 @@
 package controllers;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import generated.ExternalSoapService;
 import generated.ExternalSoapServiceService;
 
 import generated.Ticket;
 import generated.Spot;
+import org.joda.time.DateTime;
 
 import javax.ejb.*;
 import javax.faces.application.FacesMessage;
@@ -13,7 +21,9 @@ import javax.inject.Named;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -26,6 +36,7 @@ public class RaportBeanImpl implements Serializable,RaportBean{
     private static final String REST_URL = "http://localhost:8080/repository/api/external";
     private Client client;
 
+    @Override
     public void testString() {
         client = ClientBuilder.newClient();
         WebTarget target = client.target(REST_URL + "/test");
@@ -66,9 +77,75 @@ public class RaportBeanImpl implements Serializable,RaportBean{
         return response;
     }
 
+    /*------------------REST-----------------------*/
+
+    @Override
+    public List<entity.Spot> rest_getAllSpots() {
+        client = ClientBuilder.newClient();
+        WebTarget target = client.target(REST_URL + "/allspots");
+        Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.get();
+        List<entity.Spot> spots = response.readEntity(List.class);
+        pushMessage("Rest all spots: " + spots);
+        return spots;
+    }
+
+    @Override
+    public List<entity.Ticket> rest_getAllTickets() {
+        client = ClientBuilder.newClient();
+        WebTarget target = client.target(REST_URL + "/alltickets");
+        Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.get();
+        List<entity.Ticket> tickets = response.readEntity(List.class);
+        List<entity.Ticket> result = new ArrayList<>(tickets.size());
+        pushMessage("Rest all tickets: " + tickets);
+
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.registerModule(new JodaModule());
+//        for (String ticketJson: tickets) {
+//            entity.Ticket ticket = null;
+//            try {
+//                ticket = mapper.readValue(ticketJson, entity.Ticket.class);
+//            } catch (JsonParseException e) {
+//                e.printStackTrace();
+//            } catch (JsonMappingException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            result.add(ticket);
+//        }
+//        return result;
+        return tickets;
+    }
+
+    @Override
+    public Integer rest_getTicketsNumber() {
+        client = ClientBuilder.newClient();
+        WebTarget target = client.target(REST_URL + "/ticketsnumber");
+        Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.get();
+        Integer tickets_number = response.readEntity(Integer.class);
+        pushMessage("Rest ticket number: " + tickets_number);
+        return tickets_number;
+    }
+
+    @Override
+    public Integer rest_getSpotsNumber() {
+        client = ClientBuilder.newClient();
+        WebTarget target = client.target(REST_URL + "/spotsnumber");
+        Invocation.Builder invocationBuilder = target.request();
+        Response response = invocationBuilder.get();
+        Integer spots_number = response.readEntity(Integer.class);
+        pushMessage("Rest spots number: " + spots_number);
+        return spots_number;
+    }
+
     /*------------------UTILS----------------------*/
     public void pushMessage(String text) {
         FacesMessage message = new FacesMessage(text);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+
+
 }

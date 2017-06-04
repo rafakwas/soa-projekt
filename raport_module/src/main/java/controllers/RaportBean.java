@@ -12,4 +12,11 @@ public interface RaportBean {
     List<Ticket> soap_getAllTickets();
     Integer soap_getTicketsNumber();
     Integer soap_getSpotsNumber();
+
+    List<entity.Spot> rest_getAllSpots();
+    List<entity.Ticket> rest_getAllTickets();
+    Integer rest_getTicketsNumber();
+    Integer rest_getSpotsNumber();
+
+    void testString();
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import entity.Spot;
 import entity.Ticket;
 import repository.Repository;
 import javax.inject.Inject;
@@ -42,4 +43,31 @@ public class ApiRest {
         }
         return builder.build();
     }
+
+    @GET
+    @Path("/alltickets")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Ticket> getAllTickets() {
+        return repository.getAllTickets();
+    }
+
+    @GET
+    @Path("/allspots")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Spot> getAllSpots() {
+        return repository.getAllSpots();
+    }
+
+    @GET
+    @Path("/ticketsnumber")
+    public Integer getTicketsNumber() {
+        return repository.getAllTickets().size();
+    }
+
+    @GET
+    @Path("/spotsnumber")
+    public Integer getSpotsNumber() {
+        return repository.getAllSpots().size();
+    }
+
 }

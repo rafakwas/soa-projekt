@@ -36,7 +36,6 @@ public class RepoTestBean implements Serializable {
     @Inject
     Repository repository;
 
-
     public void occupy() {
         DateTime time = new DateTime();
         LOGGER.info(() -> "New spot occupied. Place: " + id + ".Time: " + time);
