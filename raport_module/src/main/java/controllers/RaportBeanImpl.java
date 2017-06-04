@@ -46,7 +46,6 @@ public class RaportBeanImpl implements Serializable,RaportBean{
         pushMessage(response.readEntity(String.class));
     }
 
-
     /*------------------SOAP----------------------*/
     @Override
     public Integer soap_getTicketsNumber() {
@@ -114,7 +113,6 @@ public class RaportBeanImpl implements Serializable,RaportBean{
         pushMessage("Rest ticket number: " + tickets_number);
         return tickets_number;
     }
-
     @Override
     public Integer rest_getSpotsNumber() {
         client = ClientBuilder.newClient();
@@ -125,7 +123,6 @@ public class RaportBeanImpl implements Serializable,RaportBean{
         pushMessage("Rest spots number: " + spots_number);
         return spots_number;
     }
-
     /*------------------UTILS----------------------*/
     private void pushMessage(String text) {
         FacesMessage message = new FacesMessage(text);
@@ -172,7 +169,6 @@ public class RaportBeanImpl implements Serializable,RaportBean{
             spots.add(spot);
         }
         return spots;
-
     }
 
 

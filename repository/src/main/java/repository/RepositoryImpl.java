@@ -32,6 +32,7 @@ import static javax.ejb.LockType.WRITE;
 
 
 @Singleton
+@Startup
 @ConcurrencyManagement(value = ConcurrencyManagementType.CONTAINER)
 @Local(Repository.class)
 @AccessTimeout(value=30000)
