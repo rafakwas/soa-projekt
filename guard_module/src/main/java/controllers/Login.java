@@ -63,7 +63,8 @@ public class Login implements Serializable {
     public String logout() {
         HttpSession session = SessionUtils.getSession();
         session.invalidate();
-        return "login";
+        // TODO usuwanie z singltonowego beana
+        return "SecureServlet";
     }
 
     private boolean checkCredentials(String user, String pwd) {

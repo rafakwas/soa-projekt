@@ -35,8 +35,10 @@
                     </h:panelGrid>
 
                     <h:panelGrid columns="1">
-                        <p>Welcome #{sessionScope.username}</p>
+                        <p>Welcome #{request.remoteUser}</p>
                         <h:commandLink action="#{login.logout}" value="Logout"></h:commandLink>
+                        <h:commandLink action="modify_passwords" value="Modify guards password" rendered="#{request.isUserInRole('admin')}"/>
+                        <h:commandLink action="change_my_password" value="Change my password" rendered="#{not request.isUserInRole('admin')}"/>
                     </h:panelGrid>
 
                 </h:panelGrid>
@@ -49,6 +51,8 @@
                     #{_notification}
                 </h:column>
             </h:dataTable>
+
+
         </ui:define>
     </ui:composition>
 </h:body>
