@@ -4,6 +4,7 @@ import entity.User;
 import org.jboss.security.auth.spi.Util;
 import utils.SessionUtils;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.TransactionManagement;
@@ -14,6 +15,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -73,28 +75,15 @@ public class Login implements Serializable {
     public void setUser(String user) {
         this.user = user;
     }
-//
-//    public String validateUsernamePassword() {
-//        boolean valid = checkCredentials(user, pwd);
-//        if (valid) {
-//            HttpSession session = SessionUtils.getSession();
-//            session.setAttribute("username", user);
-//            return "guard";
-//        } else {
-//            FacesContext.getCurrentInstance().addMessage(
-//                    null,
-//                    new FacesMessage(FacesMessage.SEVERITY_WARN,
-//                            "Incorrect Username and Passowrd",
-//                            "Please enter correct username and Password"));
-//            return "login";
-//        }
-//    }
-//
-//    public String logout() throws ServletException, IOException {
-//        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-//        session.invalidate();
-//        return "/index?faces-redirect=true";
-//    }
+
+    public String logout() throws ServletException, IOException {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        session.invalidate();
+
+        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        req.logout();
+        return "login.html";
+    }
 
     @Transactional
     public Integer getUserId() {
