@@ -13,7 +13,7 @@ import java.security.Principal;
 
 @SuppressWarnings("serial")
 @WebServlet("/SecuredServlet")
-@ServletSecurity(@HttpConstraint(rolesAllowed = { "admin" }))
+@ServletSecurity(@HttpConstraint(rolesAllowed = { "quickstarts" }))
 public class SecuredServlet extends HttpServlet {
 
     private static String PAGE_HEADER = "<html><head><title>guard-security</title></head><body>";
