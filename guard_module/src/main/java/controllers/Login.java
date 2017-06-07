@@ -76,13 +76,13 @@ public class Login implements Serializable {
         this.user = user;
     }
 
-    public String logout() throws ServletException, IOException {
+    public void logout() throws ServletException, IOException {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         session.invalidate();
 
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         req.logout();
-        return "login.html";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("login.html");
     }
 
     @Transactional
