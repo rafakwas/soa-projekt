@@ -24,8 +24,8 @@ public class SecuredServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/guard.xhtml").forward(req, resp);
 
-        HttpSession session = req.getSession(false);
-        session.setAttribute("username",req.getUserPrincipal().getName());
+//        HttpSession session = req.getSession(false);
+//        session.setAttribute("username",req.getUserPrincipal().getName());
         /*BEZ MOŻLIWOŚCI WEJŚCIA BEZPOŚREDNIO DO GUARD JSF */
 //        request.getRequestDispatcher("/WEB-INF/guard.xhtml").forward(request, response);
 
