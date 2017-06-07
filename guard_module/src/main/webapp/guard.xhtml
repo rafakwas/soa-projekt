@@ -39,6 +39,7 @@
                         <h:commandLink action="#{login.logout}" value="Logout"></h:commandLink>
                         <h:commandLink action="modify_passwords" value="Modify guards password" rendered="#{request.isUserInRole('admin')}"/>
                         <h:commandLink action="change_my_password" value="Change my password" rendered="#{not request.isUserInRole('admin')}"/>
+                        <h:commandButton action="#{login.listUsers}" value="Connect to DataSource"/>
                     </h:panelGrid>
 
                 </h:panelGrid>
