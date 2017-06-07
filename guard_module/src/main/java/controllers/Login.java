@@ -44,7 +44,6 @@ public class Login implements Serializable {
         this.user = user;
     }
 
-    //validate login
     public String validateUsernamePassword() {
         boolean valid = checkCredentials(user, pwd);
         if (valid) {
@@ -60,7 +59,7 @@ public class Login implements Serializable {
             return "login";
         }
     }
-    //logout event, invalidate session
+
     public String logout() {
         HttpSession session = SessionUtils.getSession();
         session.invalidate();

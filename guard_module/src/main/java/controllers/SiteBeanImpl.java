@@ -1,5 +1,7 @@
 package controllers;
 
+import utils.SessionUtils;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Local;
 import javax.ejb.Singleton;
@@ -31,6 +33,18 @@ public class SiteBeanImpl implements SiteBean {
         LOGGER.info("notifications added: " + text);
         notifications.add(text);
     }
+
+    @Override
+    public boolean isUserAdmin() {
+        return SessionUtils.getRequest().isUserInRole("ADMIN");
+    }
+
+    @Override
+    public boolean isUserGuard() {
+        return SessionUtils.getRequest().isUserInRole("GUARD");
+    }
+
+
 
     /*--------------------GETTERS & SETTERS --------------------------*/
     @Override
