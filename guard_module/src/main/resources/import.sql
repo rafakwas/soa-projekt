@@ -20,9 +20,9 @@ DROP TABLE USER_ROLES;
 CREATE TABLE USERS(login VARCHAR(64) PRIMARY KEY, passwd VARCHAR(64));
 CREATE TABLE USER_ROLES(login VARCHAR(64), role VARCHAR(32));
 
-INSERT into USERS values('admin', 'admin');
-INSERT into USERS values('guard1', 'guard1');
-INSERT into USERS values('guard2', 'guard2');
+INSERT into USERS values('admin', 'ISMvKXpXpadDiUoOSoAfww==');
+INSERT into USERS values('guard1', '771fvPTo2hwhqnFqj26JKg==');
+INSERT into USERS values('guard2', '2acNL6r5hJk036uQsveFZA==');
 
 INSERT into USER_ROLES values('admin', 'admin');
 INSERT into USER_ROLES values('guard1', 'pool1');

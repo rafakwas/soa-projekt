@@ -22,9 +22,7 @@
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
     <persistence-unit name="guardunit">
         <class>entity.User</class>
-
         <jta-data-source>java:jboss/datasources/ProjectDS</jta-data-source>
-
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="create-drop" />
             <property name="hibernate.show_sql" value="true" />
