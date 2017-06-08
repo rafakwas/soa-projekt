@@ -60,7 +60,7 @@ public class SesssionFilter implements Filter {
 
             if (s != null) {
                 //trying to log in as same username. should inform
-                response.sendRedirect("alreadyLogged.html");
+                response.sendRedirect("/guard_module/public/alreadyLogged.html");
             }
 
 

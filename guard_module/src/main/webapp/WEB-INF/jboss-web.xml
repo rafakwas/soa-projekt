@@ -19,4 +19,6 @@
 <jboss-web>
    <security-domain>guard-security</security-domain>
    <disable-audit>true</disable-audit>
+
+
 </jboss-web>

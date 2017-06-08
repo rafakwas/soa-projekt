@@ -25,8 +25,22 @@
       </session-timeout>
    </session-config>
    <welcome-file-list>
-      <welcome-file>guard.xhtml</welcome-file>
+      <welcome-file>/secured/guard.xhtml</welcome-file>
    </welcome-file-list>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>resturls</web-resource-name>
+         <url-pattern>/api/notification/message</url-pattern>
+      </web-resource-collection>
+   </security-constraint>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Open Resources</web-resource-name>
+         <url-pattern>/public/*</url-pattern>
+      </web-resource-collection>
+   </security-constraint>
 
    <security-constraint>
       <display-name>Admin constraints</display-name>
@@ -87,8 +101,8 @@
       <auth-method>FORM</auth-method>
       <realm-name>RealmUsersRoles</realm-name>
       <form-login-config>
-         <form-login-page>/login.html</form-login-page>
-         <form-error-page>/error.html</form-error-page>
+         <form-login-page>/public/login.html</form-login-page>
+         <form-error-page>/public/error.html</form-error-page>
       </form-login-config>
    </login-config>
 

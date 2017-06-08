@@ -76,13 +76,10 @@ public class Login implements Serializable {
         this.user = user;
     }
 
-    public void logout() throws ServletException, IOException {
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        session.invalidate();
+    public String logout() {
 
-        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        req.logout();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("login.html");
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "/public/index?faces-redirect=true";
     }
 
     @Transactional
@@ -115,14 +112,14 @@ public class Login implements Serializable {
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpServletResponse resp = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
         req.setAttribute("user_id",id);
-        req.getRequestDispatcher("/password_change.xhtml").forward(req, resp);
+        req.getRequestDispatcher("/secured/password_change.xhtml").forward(req, resp);
     }
 
     public void redirectUserToPasswordChange() throws ServletException, IOException {
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpServletResponse resp = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
         req.setAttribute("user_id",getUserId());
-        req.getRequestDispatcher("/password_change.xhtml").forward(req, resp);
+        req.getRequestDispatcher("/secured/password_change.xhtml").forward(req, resp);
     }
 
     @Transactional
@@ -141,7 +138,7 @@ public class Login implements Serializable {
                 .setParameter("password",newHashedPassword)
                 .setParameter("id",id).executeUpdate();
 
-        return "guard.jsf";
+        return "/secured/guard.xhtml";
     }
 
 

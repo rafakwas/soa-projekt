@@ -36,8 +36,8 @@
 
                     <h:panelGrid columns="1">
                         <p>Welcome #{request.remoteUser}</p>
-                        <h:commandLink action="#{login.logout}" value="Logout"></h:commandLink>
-                        <h:commandLink action="modify_passwords" value="Modify guards password" rendered="#{request.isUserInRole('admin')}"/>
+                        <h:commandLink action="#{login.logout()}" value="Logout"/>
+                        <h:commandLink action="/secured/modify_passwords" value="Modify guards password" rendered="#{request.isUserInRole('admin')}"/>
                         <h:commandLink action="#{login.redirectUserToPasswordChange}" value="Change my password" rendered="#{not request.isUserInRole('admin')}">
                         </h:commandLink>
                         <h:commandButton action="#{login.listUsers}" value="Connect to DataSource"/>
