@@ -119,11 +119,5 @@
    <security-role>
       <role-name>pool2</role-name>
    </security-role>
-   <!---->
-   <!--&lt;!&ndash; Configure login to be HTTP Basic &ndash;&gt;-->
-   <!--<login-config>-->
-      <!--<auth-method>BASIC</auth-method>-->
-      <!--<realm-name>RealmUsersRoles</realm-name>-->
-   <!--</login-config>-->
 </web-app>
 
