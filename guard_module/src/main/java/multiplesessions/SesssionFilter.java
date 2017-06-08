@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import java.io.IOException;
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -21,8 +22,10 @@ import javax.servlet.http.HttpSession;
 public class SesssionFilter implements Filter {
     private final static Logger LOGGER = Logger.getLogger(SesssionFilter.class.toString());
 
+    @Inject
+    MapRepo sessions;
 
-    private Map<String, HttpSession> sessions = new HashMap<String, HttpSession>();
+//    private Map<String, HttpSession> sessions = new HashMap<String, HttpSession>();
 
     public void init(FilterConfig config) throws ServletException {
     }
@@ -59,6 +62,7 @@ public class SesssionFilter implements Filter {
 
 
             if (s != null) {
+                session.invalidate();
                 //trying to log in as same username. should inform
                 response.sendRedirect("/guard_module/public/alreadyLogged.html");
             }

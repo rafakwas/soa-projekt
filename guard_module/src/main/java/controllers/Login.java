@@ -1,6 +1,7 @@
 package controllers;
 
 import entity.User;
+import multiplesessions.MapRepo;
 import org.jboss.security.auth.spi.Util;
 import utils.SessionUtils;
 
@@ -13,6 +14,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.RequestDispatcher;
@@ -44,6 +46,8 @@ public class Login implements Serializable {
 
     private static final long serialVersionUID = 1094801825228386363L;
 
+    @Inject
+    MapRepo sessions;
 
     @PersistenceContext(unitName = "guardunit")
     private EntityManager entityManager;
@@ -77,7 +81,8 @@ public class Login implements Serializable {
     }
 
     public String logout() {
-
+        String username = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
+        sessions.remove(username);
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/public/index?faces-redirect=true";
     }
