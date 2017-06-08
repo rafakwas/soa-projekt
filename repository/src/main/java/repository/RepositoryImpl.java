@@ -41,6 +41,9 @@ public class RepositoryImpl implements Repository {
     private final static Logger LOGGER = Logger.getLogger(RepositoryImpl.class.toString());
     private final static Integer SPOT_WITH_NO_TICKET_EXPIRATION = 30; // TODO seconds!
 
+    private final static String TICKET_EXPIRATION_MESSAGE = "Ticket expired. Place:";
+    private final static String TICKET_NOT_BOUGHT = "Ticket not bought. Place:";
+
     private EntityManagerFactory emfSpot;
     private EntityManager emSpot;
 
@@ -128,7 +131,8 @@ public class RepositoryImpl implements Repository {
             if (ticket == null) {
                 LOGGER.info("No ticket found for place " + place + ". Event detector is being informed!");
                 //TODO send JMS message here: new car from :place = place didn't pay for spot
-                sendMessage("TICKET NOT BOUGHT: PLACE " + place);
+                LOGGER.info("Message sended by main_receiver: " + TICKET_NOT_BOUGHT + place);
+                sendMessage(TICKET_NOT_BOUGHT + place);
             }
             else {
                 LOGGER.info("Found ticket for place " + place + ". Event detector won't be informed!. Ticket: " + ticket);
@@ -146,8 +150,9 @@ public class RepositoryImpl implements Repository {
             else {
                 LOGGER.info("Spot is occupied and ticket is expired. Inform event detector!");
                 LOGGER.info("Event detector is being informed.....");
+                LOGGER.info("Message sended by main_receiver: " + TICKET_EXPIRATION_MESSAGE + ticketExpirationAction.getPlace());
                 // TODO send JMS message here: ticket expired and car from :place = place is still occupying spot
-                sendMessage("TICKET EXPIRATION: place " + ticketExpirationAction.getPlace());
+                sendMessage(TICKET_EXPIRATION_MESSAGE + ticketExpirationAction.getPlace());
             }
         }
     }

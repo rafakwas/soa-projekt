@@ -47,13 +47,27 @@
             </h:form>
 
             <br/>
-            <h:dataTable id="notifications" value="#{sitebeanimpl.notifications}" var="_notification">
+
+            <h:dataTable id="admin_notifications" value="#{sitebeanimpl.notifications}" var="_notification" rendered="#{request.isUserInRole('admin')}">
                 <h:column>
-                    <f:facet name="header">notification</f:facet>
+                    <f:facet name="header">all notifications</f:facet>
                     #{_notification}
                 </h:column>
             </h:dataTable>
 
+            <h:dataTable id="pool1_notifications" value="#{sitebeanimpl.getFilteredNotifications('pool1')}" var="_pool1_notification" rendered="#{request.isUserInRole('pool1')}">
+                <h:column>
+                    <f:facet name="header">pool 1 notifications</f:facet>
+                    #{_pool1_notification}
+                </h:column>
+            </h:dataTable>
+
+            <h:dataTable id="pool2_notifications" value="#{sitebeanimpl.getFilteredNotifications('pool2')}" var="_pool2_notification" rendered="#{request.isUserInRole('pool2')}">
+                <h:column>
+                    <f:facet name="header">pool 2 notifications</f:facet>
+                    #{_pool2_notification}
+                </h:column>
+            </h:dataTable>
 
         </ui:define>
     </ui:composition>

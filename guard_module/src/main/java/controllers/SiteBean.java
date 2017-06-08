@@ -1,10 +1,10 @@
 package controllers;
 
+import entity.Message;
+
 import java.util.List;
 
 public interface SiteBean {
-    void addNotification(String text);
-    List<String> getNotifications();
-    boolean isUserAdmin();
-    boolean isUserGuard();
+    List<Message> getNotifications();
+    List<Message> getFilteredNotifications(String pool);
 }
