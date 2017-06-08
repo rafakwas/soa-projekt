@@ -87,23 +87,23 @@ public class Login implements Serializable {
         return "/public/index?faces-redirect=true";
     }
 
-    @Transactional
-    public Integer getUserId() {
-        Principal principal = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
-        String username = principal.getName();
-        LOGGER.info("principal name: " + username);
-        Session session = entityManager.unwrap(Session.class);
-        User user = (User)session.createQuery("from User where username = :username")
-                .setParameter("username",username)
-                .uniqueResult();
-        if(user == null) {
-            LOGGER.info("NO USER FOUND :( with username " + username);
-        }
-        else {
-            LOGGER.info("Found id : " + user.getId());
-        }
-        return user.getId();
-    }
+//    @Transactional
+//    public Integer getUserId() {
+//        Principal principal = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
+//        String username = principal.getName();
+//        LOGGER.info("principal name: " + username);
+//        Session session = entityManager.unwrap(Session.class);
+//        User user = (User)session.createQuery("from User where username = :username")
+//                .setParameter("username",username)
+//                .uniqueResult();
+//        if(user == null) {
+//            LOGGER.info("NO USER FOUND :( with username " + username);
+//        }
+//        else {
+//            LOGGER.info("Found id : " + user.getId());
+//        }
+//        return user.getId();
+//    }
 
     @RolesAllowed("admin")
     public List<User> getUserList() {
@@ -113,35 +113,38 @@ public class Login implements Serializable {
         return list;
     }
 
-    public void changeUserPassword(Integer id) throws ServletException, IOException {
+    public String changeUserPassword(String username) throws ServletException, IOException {
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpServletResponse resp = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        req.setAttribute("user_id",id);
-        req.getRequestDispatcher("/secured/password_change.xhtml").forward(req, resp);
+        req.setAttribute("username",username);
+        return "/secured/password_change.xhtml";
     }
 
-    public void redirectUserToPasswordChange() throws ServletException, IOException {
+    public String redirectUserToPasswordChange() throws ServletException, IOException {
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpServletResponse resp = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        req.setAttribute("user_id",getUserId());
-        req.getRequestDispatcher("/secured/password_change.xhtml").forward(req, resp);
+        String username = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
+        req.setAttribute("username",username);
+//        req.getRequestDispatcher("/secured/password_change.xhtml").forward(req, resp);
+        return "/secured/password_change.xhtml";
     }
 
     @Transactional
     public String submitNewPassword() {
         Map<String, String> parameterMap = (Map<String, String>) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        String param = parameterMap.get("user_id");
-        Integer id = Integer.parseInt(param);
+        String username = parameterMap.get("username");
         String newHashedPassword = Util.createPasswordHash("MD5",
                 Util.BASE64_ENCODING,
                 null,
                 null,
                 pwd);
 
+        LOGGER.info("submitNewPassoword: new password " + newHashedPassword + " for user " + username);
         Session session = entityManager.unwrap(Session.class);
-        session.createQuery("update User set password = :password where id = :id")
+        session.createQuery("update User set password = :password where username = :username")
                 .setParameter("password",newHashedPassword)
-                .setParameter("id",id).executeUpdate();
+                .setParameter("username",username).executeUpdate();
+        LOGGER.info("should get submited....");
 
         return "/secured/guard.xhtml";
     }

@@ -2,30 +2,18 @@ package entity;
 
 import javax.persistence.*;
 
-
 @Entity
 @Table(name = "USERS")
 public class User {
-    @Id
-    @GeneratedValue
-    @Column(name = "ID",updatable=false)
-    private Integer id;
 
-    @Column(name = "USERNAME")
+    @Id
+    @Column(name = "login")
     private String username;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "passwd")
     private String password;
 
     public User() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -47,8 +35,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
+                "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
