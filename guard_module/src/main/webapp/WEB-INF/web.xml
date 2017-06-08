@@ -23,75 +23,19 @@
       <session-timeout>
          30
       </session-timeout>
+
    </session-config>
    <welcome-file-list>
-      <welcome-file>/secured/guard.xhtml</welcome-file>
+      <welcome-file>/public/index.html</welcome-file>
    </welcome-file-list>
 
-   <security-constraint>
-      <web-resource-collection>
-         <web-resource-name>resturls</web-resource-name>
-         <url-pattern>/api/notification/message</url-pattern>
-      </web-resource-collection>
-   </security-constraint>
+
 
    <security-constraint>
       <web-resource-collection>
          <web-resource-name>Open Resources</web-resource-name>
-         <url-pattern>/public/*</url-pattern>
-      </web-resource-collection>
-   </security-constraint>
-
-   <security-constraint>
-      <display-name>Admin constraints</display-name>
-      <web-resource-collection>
-         <web-resource-name>wrcoll0</web-resource-name>
-         <description/>
          <url-pattern>/*</url-pattern>
-         <http-method>PUT</http-method>
-         <http-method>DELETE</http-method>
-         <http-method>GET</http-method>
-         <http-method>POST</http-method>
-
       </web-resource-collection>
-      <auth-constraint>
-         <description/>
-         <role-name>admin</role-name>
-      </auth-constraint>
-   </security-constraint>
-
-   <security-constraint>
-      <display-name>Guard 1 constrints</display-name>
-      <web-resource-collection>
-         <web-resource-name>wrcoll1</web-resource-name>
-         <description/>
-         <url-pattern>/*</url-pattern>
-         <http-method>PUT</http-method>
-         <http-method>DELETE</http-method>
-         <http-method>GET</http-method>
-         <http-method>POST</http-method>
-      </web-resource-collection>
-      <auth-constraint>
-         <description/>
-         <role-name>pool1</role-name>
-      </auth-constraint>
-   </security-constraint>
-
-   <security-constraint>
-      <display-name>Guard 2 constrints</display-name>
-      <web-resource-collection>
-         <web-resource-name>wrcoll2</web-resource-name>
-         <description/>
-         <url-pattern>/*</url-pattern>
-         <http-method>PUT</http-method>
-         <http-method>DELETE</http-method>
-         <http-method>GET</http-method>
-         <http-method>POST</http-method>
-      </web-resource-collection>
-      <auth-constraint>
-         <description/>
-         <role-name>pool2</role-name>
-      </auth-constraint>
    </security-constraint>
 
 
@@ -101,8 +45,8 @@
       <auth-method>FORM</auth-method>
       <realm-name>file</realm-name>
       <form-login-config>
-         <form-login-page>/public/login.html</form-login-page>
-         <form-error-page>/public/error.html</form-error-page>
+         <form-login-page>/public/login.xhtml</form-login-page>
+         <form-error-page>/public/error.xhtml</form-error-page>
       </form-login-config>
    </login-config>
 
@@ -119,11 +63,5 @@
    <security-role>
       <role-name>pool2</role-name>
    </security-role>
-   <!---->
-   <!--&lt;!&ndash; Configure login to be HTTP Basic &ndash;&gt;-->
-   <!--<login-config>-->
-      <!--<auth-method>BASIC</auth-method>-->
-      <!--<realm-name>RealmUsersRoles</realm-name>-->
-   <!--</login-config>-->
 </web-app>
 
