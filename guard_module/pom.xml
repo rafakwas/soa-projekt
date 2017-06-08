@@ -154,6 +154,11 @@
         </dependency>
 
         <!-- DODATKI -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>RELEASE</version>
+        </dependency>
 
         <dependency>
             <groupId>javax</groupId>

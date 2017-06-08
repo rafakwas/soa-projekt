@@ -44,6 +44,7 @@ public class SesssionFilter implements Filter {
         if (principal != null && session.getAttribute("THE_PRINCIPAL") == null) {
 
             // update the current session
+
             session.setAttribute("THE_PRINCIPAL", session);
 
             // get the username from the principal
@@ -52,6 +53,10 @@ public class SesssionFilter implements Filter {
 
             // invalidate previous session if it exists
             HttpSession s = sessions.get(username);
+
+            LOGGER.info("username: " + username + "is admin: " + request.isUserInRole("admin"));
+            LOGGER.info("username: " + username + "is pool1: " + request.isUserInRole("pool1"));
+            LOGGER.info("username: " + username + "is pool2: " + request.isUserInRole("pool2"));
 
             if (s != null) {
                 LOGGER.info("username: " + username + " session: " + s.getId());

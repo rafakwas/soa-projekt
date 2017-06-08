@@ -6,6 +6,9 @@
     <title>bye bye</title>
 </h:head>
 <h:body>
-    bye bye
+    <h:outputText value="#{request.isUserInRole('admin')}"/>
+    <h:outputText value="#{request.isUserInRole('pool1')}"/>
+    <h:outputText value="#{request.isUserInRole('pool2')}"/>
+    hejejjjjjj
 </h:body>
 </html>
