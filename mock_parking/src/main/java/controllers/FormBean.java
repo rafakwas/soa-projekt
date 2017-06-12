@@ -13,6 +13,8 @@ import org.joda.time.DateTime;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.client.*;
@@ -34,31 +36,22 @@ public class FormBean implements Serializable {
     private Integer duration;
     private Integer ticket_place;
 
-    @Resource
-    TimerService timerService;
-
     private final static Integer SPOT_WITH_NO_TICKET_EXPIRATION = 2;
     private static final String REST_URL = "http://localhost:8080/main_receiver/api/ticket";
     private Client client;
-
-    public void triggerTimer() {
-        long intervalDuration = 10000;
-        LOGGER.info("Setting a programmatic timeout for "
-                + intervalDuration + " milliseconds from now.");
-        Integer x = 5;
-        Timer timer = timerService.createTimer(intervalDuration, x);
-    }
-
-    @Timeout
-    public void programmaticTimeout(Timer timer) {
-        Integer passed = (Integer)timer.getInfo();
-        LOGGER.info("Programmatic timeout occurred. Info: passed equals" + passed);
-    }
 
     public void occupy() {
         generated.DateTime time = new generated.DateTime();
         LOGGER.info(() -> "New spot occupied. Time: " + time);
 
+        for(int i = 0; i < occupied.size(); i++) {
+            if (occupied.get(i).getPlace()==id) {
+                LOGGER.info("spot already occupied");
+                FacesMessage message = new FacesMessage("Spot " + id + " is already occupied");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
+            }
+        }
         generated.Spot spot = new generated.Spot();
         spot.setPlace(id);
         spot.setTime(time);
@@ -106,12 +99,8 @@ public class FormBean implements Serializable {
             e.printStackTrace();
         }
         /* ------------------------PREPARE TICKET JSON ----------------------------*/
-
         Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.post(Entity.entity(input, MediaType.APPLICATION_JSON));
-
-//        LOGGER.info(response.getStatus() + "");
-//        LOGGER.info(response.readEntity(String.class) + "");
     }
 
     /* GETTERS & SETTERS */
@@ -132,10 +121,7 @@ public class FormBean implements Serializable {
         return duration;
     }
 
-    public void setDuration(Integer duration) {
-
-        this.duration = duration;
-    }
+    public void setDuration(Integer duration) {this.duration = duration;}
 
     public Integer getTicket_place() {
         return ticket_place;

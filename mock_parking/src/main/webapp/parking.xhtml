@@ -4,7 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:a4j="http://richfaces.org/a4j">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Parking</title>
 </h:head>
@@ -24,10 +24,12 @@
                              value="Occupy"></h:commandButton>
             </h:panelGrid>
     </h:form>
-    <h:form id="timer">
-        <h2>Trigger timer</h2>
-        <h:commandButton action="#{formbean.triggerTimer}" value="Timer set..."/>
+
+    <h:form id="messagesForm">
+        <p:messages id="messagesFromMock" showDetails="false" autoUpdate="true"/>
     </h:form>
+
+
     <h:form id="ticket">
         <h2>Buy ticket</h2>
         <h:panelGrid columns="4">

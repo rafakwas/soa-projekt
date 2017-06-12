@@ -167,6 +167,11 @@
       <!-- DODATKI -->
 
         <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>6.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.richfaces</groupId>
             <artifactId>richfaces</artifactId>
             <version>4.5.17.Final</version>

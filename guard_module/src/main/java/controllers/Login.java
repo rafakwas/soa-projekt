@@ -87,24 +87,6 @@ public class Login implements Serializable {
         return "/public/index?faces-redirect=true";
     }
 
-//    @Transactional
-//    public Integer getUserId() {
-//        Principal principal = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
-//        String username = principal.getName();
-//        LOGGER.info("principal name: " + username);
-//        Session session = entityManager.unwrap(Session.class);
-//        User user = (User)session.createQuery("from User where username = :username")
-//                .setParameter("username",username)
-//                .uniqueResult();
-//        if(user == null) {
-//            LOGGER.info("NO USER FOUND :( with username " + username);
-//        }
-//        else {
-//            LOGGER.info("Found id : " + user.getId());
-//        }
-//        return user.getId();
-//    }
-
     @RolesAllowed("admin")
     public List<User> getUserList() {
         String hql = "from User ";
