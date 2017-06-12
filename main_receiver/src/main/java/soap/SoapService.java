@@ -27,15 +27,14 @@ public class SoapService {
     @WebMethod
     public void notifyOccupation(Spot spot) {
         LOGGER.info("spot occupation receiver: " + spot);
-        receiverBean.addNotification("miejsce zajete");
+        receiverBean.addNotification("Mock: spot " + spot.getPlace() + " occupied");
         repository.addSpot(spot);
     }
 
     @WebMethod
     public void notifyVacation(Integer id) {
         LOGGER.info("spot vacation receiver: " + id);
-        receiverBean.addNotification("miejsce " + id + " opuszczone");
-        LOGGER.info("repository test passed");
+        receiverBean.addNotification("Mock: spot " + id + " abondoned");
         repository.removeSpot(id);
     }
 }
