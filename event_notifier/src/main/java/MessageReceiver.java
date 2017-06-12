@@ -22,6 +22,9 @@ public class MessageReceiver implements MessageListener {
 
     private final static String TICKET_EXPIRATION_MESSAGE = "Ticket expired. Place: ";
     private final static String TICKET_NOT_BOUGHT = "Ticket not bought. Place: ";
+    private final static String NEW_CAR_VANISHED = "Car abondoned spot. Place:";
+
+
 //    private final static List<String> MESSAGES_LIST = Arrays.asList(TICKET_EXPIRATION_MESSAGE,TICKET_NOT_BOUGHT);
 
     private final static Integer NUMBER_OF_PLACES = 30;
@@ -38,8 +41,15 @@ public class MessageReceiver implements MessageListener {
             try {
                 final String text = ((TextMessage) msg).getText();
                 LOGGER.info("MessageReceiver: " + text);
-                final String converted_message = prepareMessage(text);
-                procedure(converted_message);
+
+                if (onlyDashboard(text)) {
+                    return;
+                }
+                else {
+                    final String converted_message = prepareMessage(text);
+                    procedure(converted_message);
+                }
+
             } catch (final JMSException e) {
                 throw new RuntimeException(e);
             }
@@ -86,5 +96,11 @@ public class MessageReceiver implements MessageListener {
         }
         LOGGER.info("prefix : " + prefix);
         return message.append(prefix).append(text).toString();
+    }
+    private boolean onlyDashboard(String text) {
+        if (text.contains(NEW_CAR_VANISHED)) {
+            return true;
+        }
+        return false;
     }
 }

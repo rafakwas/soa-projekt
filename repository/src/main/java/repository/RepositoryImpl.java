@@ -43,6 +43,8 @@ public class RepositoryImpl implements Repository {
 
     private final static String TICKET_EXPIRATION_MESSAGE = "Ticket expired. Place:";
     private final static String TICKET_NOT_BOUGHT = "Ticket not bought. Place:";
+    private final static String NEW_CAR_VANISHED = "Car abondoned spot. Place:";
+
 
     private EntityManagerFactory emfSpot;
     private EntityManager emSpot;
@@ -127,6 +129,13 @@ public class RepositoryImpl implements Repository {
             NewCarAction newCarAction = (NewCarAction)info;
             Integer place = newCarAction.getPlace();
             LOGGER.info("Programmatic timeout occurred. Looking up to ticket for place " + place + " in database");
+            //check if car still ocupies spot!
+            Spot spot = findSpotByPlace(place);
+            if (spot == null) {
+                LOGGER.info("No car occupying spot "+ place + " found" +"! Sending notification");
+                sendMessage(NEW_CAR_VANISHED + place);
+                return;
+            }
             Ticket ticket = findTicketByPlace(place);
             if (ticket == null) {
                 LOGGER.info("No ticket found for place " + place + ". Event detector is being informed!");

@@ -17,7 +17,7 @@
             <h3>Guard site</h3>
 
             <h:form id="form">
-                <a4j:poll id="poll" interval="5000" enabled="#{pollBean.pollEnabled}" render="poll,grid,:notifications" />
+                <a4j:poll id="poll" interval="5000" enabled="#{pollBean.pollEnabled}" render="poll,grid,:admin_notifications,pool1_notifications,pool2_notifications" />
 
                 <h:panelGrid columns="2" width="100%" id="grid">
                     <h:panelGrid columns="1">
