@@ -2,10 +2,7 @@ package rest;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.sun.org.apache.xml.internal.utils.URI;
 import controllers.ReceiverBean;
@@ -28,9 +25,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Path("/ticket")
 public class TicketRest {
+    private final static Logger LOGGER = Logger.getLogger(TicketRest.class.toString());
 
     @Inject
     Repository repository;
@@ -61,6 +60,7 @@ public class TicketRest {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());
+//        mapper.enable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
 
         Ticket ticket = null;
         try {
@@ -72,6 +72,8 @@ public class TicketRest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
         repository.addTicket(ticket);
 
         String output = ticket.getStart().getHourOfDay()+":"+ticket.getStart().getMinuteOfHour()+":"+ticket.getStart().getSecondOfMinute();

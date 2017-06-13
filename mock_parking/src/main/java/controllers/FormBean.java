@@ -3,6 +3,7 @@ package controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import entity.Spot;
@@ -82,15 +83,21 @@ public class FormBean implements Serializable {
         WebTarget target = client.target(REST_URL + "/post");
 
         /* ------------------------PREPARE TICKET JSON ----------------------------*/
+        DateTime time = new DateTime();
+        LOGGER.info("Mock: ticket start time" + time);
         Ticket ticket = new Ticket();
-        ticket.setStart(DateTime.now());
+        ticket.setStart(time);
         ticket.setCost(0.5*duration.doubleValue());
         ticket.setPlace(ticket_place);
-        ticket.setEnd(DateTime.now().plusMinutes(duration));
+        ticket.setEnd(time.plusMinutes(duration));
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+//        mapper.enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID);
+//        SerializationConfig serializationConfig = mapper.getSerializationConfig();
+//        LOGGER.info("Mock time zone serialization " + serializationConfig.getTimeZone());
+
         ObjectWriter ow = mapper.writer();
         String input= null;
         try {
@@ -98,6 +105,10 @@ public class FormBean implements Serializable {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        LOGGER.info("Mock Ticket json: " + input);
+        //before
+        //15:36:32,598  INFO FormBean:103 - YYYYYYY Ticket json: {"id":null,"place":4,"start":"2017-06-13 13:36:32","end":"2017-06-13 13:40:32","cost":2.0}
+
         /* ------------------------PREPARE TICKET JSON ----------------------------*/
         Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.post(Entity.entity(input, MediaType.APPLICATION_JSON));

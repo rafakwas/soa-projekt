@@ -40,6 +40,8 @@ import java.util.logging.Logger;
 public class ReceiverBean {
     private final static Logger LOGGER = Logger.getLogger(ReceiverBean.class.toString());
 
+    private final static Integer VALID_MINUTES = 1;
+
     @Inject
     Repository repository;
 
@@ -72,7 +74,7 @@ public class ReceiverBean {
     }
 
     public List<Ticket> getValidToTenMinutesTickets() {
-        validTickets = repository.getValidTicketsWithExpirationBoundary(1);
+        validTickets = repository.getValidTicketsWithExpirationBoundary(VALID_MINUTES);
         return validTickets;
     }
 

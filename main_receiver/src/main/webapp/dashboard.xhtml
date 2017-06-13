@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:a4j="http://richfaces.org/a4j">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>DASHBOARD</title>
     <h:outputStylesheet name="style.css" />
@@ -48,38 +48,40 @@
 
             <br/>
 
-            <h:dataTable id="notifications" value="#{receiverbean.notifications}" var="_notification" rowClasses="odd,even">
-                <h:column>
-                    <f:facet name="header">notification</f:facet>
-                    #{_notification}
-                </h:column>
-            </h:dataTable>
+            <h2>Notifications table</h2>
+            <p:dataTable id="notifications" value="#{receiverbean.notifications}" var="_notification" emptyMessage="No notifications yet" style="width: 500px">
+                <p:column headerText="notification">
+                    <h:outputText value="#{_notification}"/>
+                </p:column>
+            </p:dataTable>
 
-            <h:dataTable id="occupations" value="#{receiverbean.spots}" var="_spot"
-                         styleClass = "employeeTable"
-                         headerClass = "employeeTableHeader"
-                         rowClasses = "employeeTableOddRow,employeeTableEvenRow">
-                <h:column>
-                    <f:facet name="header">DB id</f:facet>
+            <br/>
+            <h2>Occupations table</h2>
+            <p:dataTable id="occupations" value="#{receiverbean.spots}" var="_spot" emptyMessage="No spot occupied yet" style="width:1000px;">
+                <p:column headerText="DB ID">
                     <h:outputText value="#{_spot.id}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Spot occupied</f:facet>
+                </p:column>
+                <p:column headerText="Occupied spot">
                     <h:outputText value="#{_spot.place}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Occupation time</f:facet>
-                    <h:outputText value="#{_spot.time}"/>
-                </h:column>
-            </h:dataTable>
+                </p:column>
+                <p:column headerText="Occupation time">
+                    <h:outputText value="#{_spot.time.toString('HH:mm:ss')}"/>
+                </p:column>
+            </p:dataTable>
 
-
-            <h:dataTable id="tickets" value="#{receiverbean.validToTenMinutesTickets}" rowClasses="row1,row2" var="_ticket">
-                <h:column>
-                    <f:facet name="header">ticket</f:facet>
-                    #{_ticket}
-                </h:column>
-            </h:dataTable>
+            <br/>
+            <h2>Tickets valid to 10 minutes</h2>
+            <p:dataTable id="tickets" value="#{receiverbean.validToTenMinutesTickets}" var="_ticket" emptyMessage="No tickets yet" style="width: 1000px">
+                <p:column headerText="Ticket place">
+                    <h:outputText value="#{_ticket.place}"/>
+                </p:column>
+                <p:column headerText="Ticket expiration date">
+                    <h:outputText value="#{_ticket.end.toString('HH:mm:ss')}"/>
+                </p:column>
+                <p:column headerText="Ticket cost">
+                    <h:outputText value="#{_ticket.cost}"/>
+                </p:column>
+            </p:dataTable>
         </ui:define>
     </ui:composition>
 </h:body>
