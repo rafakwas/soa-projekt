@@ -14,7 +14,7 @@
         <h:panelGrid columns="4">
             <h:outputText value="Spot" />
             <h:inputText id="spot" value="#{formbean.id}">
-                <f:validateLongRange minimum="0" maximum="19"/>
+                <f:validateLongRange minimum="0" maximum="29"/>
                 <f:ajax event="keyup" render="messageSpot" />
             </h:inputText>
             <h:message id="messasgeSpot" for="spot" style="color: red"></h:message>
@@ -27,7 +27,6 @@
     <h:form id="messagesForm">
         <p:messages id="messagesFromMock" showDetails="false" autoUpdate="true"/>
     </h:form>
-
 
     <h:form id="ticket">
         <h2>Buy ticket</h2>

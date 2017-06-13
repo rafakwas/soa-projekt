@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:a4j="http://richfaces.org/a4j">
+      xmlns:a4j="http://richfaces.org/a4j" xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>DASHBOARD</title>
 </h:head>
@@ -48,27 +48,21 @@
 
             <br/>
 
-            <h:dataTable id="admin_notifications" value="#{sitebeanimpl.notifications}" var="_notification" rendered="#{request.isUserInRole('admin')}">
-                <h:column>
-                    <f:facet name="header">all notifications</f:facet>
-                    #{_notification}
-                </h:column>
-            </h:dataTable>
-
-            <h:dataTable id="pool1_notifications" value="#{sitebeanimpl.getFilteredNotifications('pool1')}" var="_pool1_notification" rendered="#{request.isUserInRole('pool1')}">
-                <h:column>
-                    <f:facet name="header">pool 1 notifications</f:facet>
-                    #{_pool1_notification}
-                </h:column>
-            </h:dataTable>
-
-            <h:dataTable id="pool2_notifications" value="#{sitebeanimpl.getFilteredNotifications('pool2')}" var="_pool2_notification" rendered="#{request.isUserInRole('pool2')}">
-                <h:column>
-                    <f:facet name="header">pool 2 notifications</f:facet>
-                    #{_pool2_notification}
-                </h:column>
-            </h:dataTable>
-
+            <p:dataTable id="admin_notifications" value="#{sitebeanimpl.notifications}" var="_notification" rendered="#{request.isUserInRole('admin')}" emptyMessage="No notifications yet">
+                <p:column headerText="admin notifications">
+                    <h:outputText value="#{_notification}"/>
+                </p:column>
+            </p:dataTable>
+            <p:dataTable id="pool1_notifications" value="#{sitebeanimpl.getFilteredNotifications('pool1')}" var="_pool1_notification" rendered="#{request.isUserInRole('pool1')}" emptyMessage="No notifications for guard 1">
+                <p:column headerText="Guard 1 notifications">
+                    <h:outputText value="#{_pool1_notification}"/>
+                </p:column>
+            </p:dataTable>
+            <p:dataTable id="pool2_notifications" value="#{sitebeanimpl.getFilteredNotifications('pool2')}" var="_pool2_notification" rendered="#{request.isUserInRole('pool2')}" emptyMessage="No notifications for guard 2">
+                <p:column headerText="Guard 2 notifications">
+                    <h:outputText value="#{_pool2_notification}"/>
+                </p:column>
+            </p:dataTable>
         </ui:define>
     </ui:composition>
 </h:body>

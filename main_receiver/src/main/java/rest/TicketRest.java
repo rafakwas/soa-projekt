@@ -60,7 +60,7 @@ public class TicketRest {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());
-//        mapper.enable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
 
         Ticket ticket = null;
         try {

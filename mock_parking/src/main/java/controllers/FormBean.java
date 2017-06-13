@@ -1,10 +1,8 @@
 package controllers;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationConfig;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import entity.Spot;
 import entity.Ticket;
@@ -21,10 +19,12 @@ import javax.inject.Named;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 
 @Singleton
@@ -94,9 +94,7 @@ public class FormBean implements Serializable {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JodaModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//        mapper.enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID);
-//        SerializationConfig serializationConfig = mapper.getSerializationConfig();
-//        LOGGER.info("Mock time zone serialization " + serializationConfig.getTimeZone());
+        mapper.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
 
         ObjectWriter ow = mapper.writer();
         String input= null;
@@ -106,9 +104,6 @@ public class FormBean implements Serializable {
             e.printStackTrace();
         }
         LOGGER.info("Mock Ticket json: " + input);
-        //before
-        //15:36:32,598  INFO FormBean:103 - YYYYYYY Ticket json: {"id":null,"place":4,"start":"2017-06-13 13:36:32","end":"2017-06-13 13:40:32","cost":2.0}
-
         /* ------------------------PREPARE TICKET JSON ----------------------------*/
         Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.post(Entity.entity(input, MediaType.APPLICATION_JSON));

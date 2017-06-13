@@ -18,7 +18,7 @@ public class BrowserFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         String userAgent = req.getHeader("User-Agent");
-        LOGGER.info("Client user agent: " + userAgent);
+//        LOGGER.info("Client user agent: " + userAgent);
         String ubuntuFirefox = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:53.0) Gecko/20100101 Firefox/53.0";
 
         if (userAgent.equals(ubuntuFirefox)) {

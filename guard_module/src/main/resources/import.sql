@@ -16,9 +16,11 @@
 
 DROP TABLE USERS;
 DROP TABLE USER_ROLES;
+-- DROP TABLE MESSAGES;
 
 CREATE TABLE USERS(login VARCHAR(64) PRIMARY KEY, passwd VARCHAR(64));
 CREATE TABLE USER_ROLES(login VARCHAR(64), role VARCHAR(32));
+-- CREATE TABLE MESSAGES(id INTEGER PRIMARY KEY, data VARCHAR(255));
 
 INSERT into USERS values('admin', 'ISMvKXpXpadDiUoOSoAfww==');
 INSERT into USERS values('guard1', '771fvPTo2hwhqnFqj26JKg==');
@@ -27,3 +29,11 @@ INSERT into USERS values('guard2', '2acNL6r5hJk036uQsveFZA==');
 INSERT into USER_ROLES values('admin', 'admin');
 INSERT into USER_ROLES values('guard1', 'pool1');
 INSERT into USER_ROLES values('guard2', 'pool2');
+--
+-- INSERT INTO MESSAGES VALUES (1,'pool1 - Ticket not bought. Place:5');
+-- INSERT INTO MESSAGES VALUES (2,'pool1 - Ticket not bought. Place:7');
+-- INSERT INTO MESSAGES VALUES (3,'pool1 - Ticket not bought. Place:10');
+-- INSERT INTO MESSAGES VALUES (4,'pool2 - Ticket not bought. Place:19');
+-- INSERT INTO MESSAGES VALUES (5,'pool2 - Ticket not bought. Place:25');
+-- INSERT INTO MESSAGES VALUES (6,'pool2 - Ticket not bought. Place:26');
+
