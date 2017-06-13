@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
+import javax.jws.WebParam;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -62,6 +63,28 @@ public class ApiRest {
         GenericEntity<List<String>> entities = new GenericEntity<List<String>>(ticketsJson){};
         return Response.status(201).entity(entities).build();
     }
+
+    @GET
+    @Path("/expirationtickets/{expiration}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllTickets(@PathParam("expiration") String expiration) {
+        Integer integer = null;
+        try {
+            integer = Integer.parseInt(expiration);
+        } catch (NumberFormatException ex) {
+            return Response.status(400).entity("wrong expiration format").build();
+        }
+        List<Ticket> tickets = repository.getValidTicketsWithExpirationBoundary(integer);
+        List<String> ticketsJson = new ArrayList<>(tickets.size());
+
+        for(Ticket ticket : tickets) {
+            ticketsJson.add(objectToString(ticket));
+        }
+
+        GenericEntity<List<String>> entities = new GenericEntity<List<String>>(ticketsJson){};
+        return Response.status(201).entity(entities).build();
+    }
+
 
     @GET
     @Path("/allspots")

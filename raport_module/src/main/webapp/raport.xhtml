@@ -22,6 +22,8 @@
                          value="Get all spots"/>
         <h:commandButton action="#{raportbeanimpl.rest_getAllTickets}"
                          value="Get all tickets"/>
+        <h:commandButton action="#{raportbeanimpl.rest_getValidTicketsWithExpirationBoundary(1)}"
+                         value="Get tickets with expiration boundary 1 minute"/>
     </h:form>
     <h:form id="soap">
         <h2>SOAP</h2>

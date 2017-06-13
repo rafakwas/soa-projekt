@@ -218,9 +218,16 @@ public class RepositoryImpl implements Repository {
     @Override
     @Lock(WRITE)
     public List<Ticket> getValidTicketsWithExpirationBoundary(final Integer EXPIRATION) {
+        LOGGER.info("External api, got expiration: " + EXPIRATION);
         List<Ticket> tickets = getAllTickets();
         List<Ticket> validTickets = new ArrayList<>(tickets.size());
-        validTickets.addAll(tickets.stream().filter(ticket -> ticket.getEnd().plusMinutes(EXPIRATION).isAfterNow()).collect(Collectors.toList()));
+        DateTime now = new DateTime();
+
+        for (int i = 0; i < tickets.size(); i++) {
+            LOGGER.info("Ticket plus minutes is: " + tickets.get(i).getEnd().plusMinutes(EXPIRATION));
+            LOGGER.info("Now time is: " + now);
+        }
+        validTickets.addAll(tickets.stream().filter(ticket -> ticket.getEnd().plusMinutes(EXPIRATION).isAfter(now)).collect(Collectors.toList()));
         return validTickets;
     }
 

@@ -123,6 +123,22 @@ public class RaportBeanImpl implements Serializable,RaportBean{
         pushMessage("Rest spots number: " + spots_number);
         return spots_number;
     }
+
+
+
+    @Override
+    public List<entity.Ticket> rest_getValidTicketsWithExpirationBoundary(Integer expiration) {
+        client = ClientBuilder.newClient();
+        LOGGER.info("RAPORT BEAN expiration " + expiration);
+        WebTarget target = client.target(REST_URL + "/expirationtickets/" + expiration);
+        Invocation.Builder invocationBuilder =  target.request(MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.get();
+        List<String> ticketsJson = response.readEntity(new GenericType<List<String>>(){});
+        List<entity.Ticket> tickets = mapStringsToTickets(ticketsJson);
+        pushMessage(""+tickets);
+        return tickets;
+    }
+
     /*------------------UTILS----------------------*/
     private void pushMessage(String text) {
         FacesMessage message = new FacesMessage(text);

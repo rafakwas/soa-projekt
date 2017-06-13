@@ -17,6 +17,7 @@ public interface RaportBean {
     List<entity.Ticket> rest_getAllTickets();
     Integer rest_getTicketsNumber();
     Integer rest_getSpotsNumber();
+    List<entity.Ticket> rest_getValidTicketsWithExpirationBoundary(Integer expiration);
 
     void testString();
 }
