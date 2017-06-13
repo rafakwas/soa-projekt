@@ -8,6 +8,7 @@
       xmlns:a4j="http://richfaces.org/a4j">
 <h:head>
     <title>DASHBOARD</title>
+    <h:outputStylesheet name="style.css" />
 </h:head>
 
 <h:body>
@@ -47,19 +48,33 @@
 
             <br/>
 
-            <h:dataTable id="notifications" value="#{receiverbean.notifications}" var="_notification">
+            <h:dataTable id="notifications" value="#{receiverbean.notifications}" var="_notification" rowClasses="odd,even">
                 <h:column>
                     <f:facet name="header">notification</f:facet>
                     #{_notification}
                 </h:column>
             </h:dataTable>
-            <h:dataTable id="occupations" value="#{receiverbean.spots}" var="_spot">
+
+            <h:dataTable id="occupations" value="#{receiverbean.spots}" var="_spot"
+                         styleClass = "employeeTable"
+                         headerClass = "employeeTableHeader"
+                         rowClasses = "employeeTableOddRow,employeeTableEvenRow">
                 <h:column>
-                    <f:facet name="header">spot</f:facet>
-                    #{_spot}
+                    <f:facet name="header">DB id</f:facet>
+                    <h:outputText value="#{_spot.id}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Spot occupied</f:facet>
+                    <h:outputText value="#{_spot.place}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Occupation time</f:facet>
+                    <h:outputText value="#{_spot.time}"/>
                 </h:column>
             </h:dataTable>
-            <h:dataTable id="tickets" value="#{receiverbean.validToTenMinutesTickets}" var="_ticket">
+
+
+            <h:dataTable id="tickets" value="#{receiverbean.validToTenMinutesTickets}" rowClasses="row1,row2" var="_ticket">
                 <h:column>
                     <f:facet name="header">ticket</f:facet>
                     #{_ticket}

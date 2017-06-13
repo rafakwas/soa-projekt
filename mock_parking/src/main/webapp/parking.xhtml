@@ -9,7 +9,6 @@
     <title>Parking</title>
 </h:head>
 <h:body>
-
     <h:form id="addbook">
             <h2>Occupy spot</h2>
         <h:panelGrid columns="4">
@@ -52,25 +51,16 @@
     </h:form>
 
     <h2>Occupied spots</h2>
-    <h:dataTable id="datatable" value="#{formbean.occupied}" var="_spot">
-        <h:column>
-            <f:facet name="header">id</f:facet>
-            #{_spot.id}
-        </h:column>
-        <h:column>
-            <f:facet name="header">place</f:facet>
-            #{_spot.place}
-        </h:column>
-        <h:column>
-            <f:facet name="header">time</f:facet>
-            #{_spot.time}
-        </h:column>
-        <h:column>
+    <p:dataTable id="datatable" value="#{formbean.occupied}" var="_spot" emptyMessage="No records found" style="width: 500px;;">
+        <p:column headerText="place">
+            <h:outputText value="#{_spot.place}"/>
+        </p:column>
+        <p:column headerText="action">
             <h:form id="action_form">
                 <h:commandButton value="vacate" action="${formbean.vacate(_spot.place)}"/>
             </h:form>
-        </h:column>
-    </h:dataTable>
+        </p:column>
+    </p:dataTable>
 
 </h:body>
 </html>
